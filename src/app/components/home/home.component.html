@@ -1,0 +1,23 @@
+<div class="jumbotron home">
+  <div class="container">
+    <div *ngIf="!currentUser">
+      <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Meet Up</h1>
+      <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">The only fake event planner you'll ever need</p>
+    </div>
+    <div *ngIf="currentUser">
+      <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Hey, {{currentUser.firstname}}</h1>
+      <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">Get started planning your fake events</p>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg" (click)="goTo('/events')">View Events</button>
+    <button *ngIf="!currentUser" type="button" class="btn btn-secondary btn-lg" (click)="goTo('/create-account')">Sign Up</button>
+    <button *ngIf="currentUser" type="button" class="btn btn-success btn-lg" (click)="goTo('/create-event')">Create an event</button>
+  </div>
+</div>
+<div class="container">
+  <h2>Browse Events</h2>
+  <p>So many fake events to choose from.</p>
+  <h2>It's Free</h2>
+  <p>Sign up and create your own fake events.</p>
+  <h2>Easy to Use</h2>
+  <p>So easy a baby could accidently use it.</p>
+</div>

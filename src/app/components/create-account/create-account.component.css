@@ -1,0 +1,19 @@
+.jumbotron.create-account {
+    background-image: url('./../../../assets/bg6.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.account-hero {
+    background-color: #eee;
+    font-size: 1.5em;
+    text-align: center;
+    padding: 20px;
+}
+
+.create-account-card {
+    max-width: 800px;
+    margin-top: -30px;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,31 @@
+<nav [@shrink]="menuAnimation" class="navbar navbar-fixed-top navbar-dark bg-primary">
+  <button (click)="toggleNavbar()" class="navbar-toggler hidden-sm-up" style="color: #fff;" type="button" aria-controls="navbar" [attr.aria-expanded]="!hideNav" aria-label="Toggle navigation">
+    <i class="fa" [class.fa-bars]="hideNav" [class.fa-close]="!hideNav" aria-hidden="true"></i>
+  </button>
+  <a class="hidden-sm-up" href style="color: #fff;" (click)="goTo('/', $event)">Meet Up</a>
+  <div class="pull-xs-right">
+    <button *ngIf="!currentUser" type="button" class="btn btn-secondary btn-sm hidden-sm-up" style="margin-top: 5px;" (click)="goTo('/create-account', $event)">Sign up</button>
+    <button *ngIf="currentUser" type="button" class="btn btn-secondary btn-sm hidden-sm-up"  style="margin-top: 5px;" (click)="logOut()">Log out</button>
+  </div>
+  <div class="container">
+    <div class="navbar-toggleable-xs" [class.collapse]="hideNav" id="navbar">
+      <a class="navbar-brand hidden-xs-down" routerLink="/">Meet Up</a>
+      <ul class="nav navbar-nav">
+        <!--<li class="nav-item">
+          <a class="nav-link" href (click)="goTo('/events', $event)" routerLinkActive="active">Events</a>
+        </li>-->
+        <li *ngIf="currentUser" class="nav-item">
+          <a class="nav-link" href (click)="goTo('/create-event', $event)" routerLinkActive="active">Create</a>
+        </li>
+      </ul>
+      <div class="pull-xs-right">
+        <button *ngIf="!currentUser" type="button" class="btn btn-outline-secondary hidden-xs-down" (click)="goTo('/create-account', $event)">Sign up</button>
+        <button *ngIf="currentUser" type="button" class="btn btn-outline-secondary hidden-xs-down" (click)="logOut()">Log out</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+<footer>
+  <div class="container"></div>
+</footer>

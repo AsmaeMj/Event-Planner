@@ -1,0 +1,62 @@
+<div class="jumbotron event-list">
+  <div class="container">
+    <!--<h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Events</h1>
+    <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="currentUser">Explore upcoming meet ups.</p>
+    <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="!currentUser">Sign up to add events.</p>-->
+    <div *ngIf="!currentUser">
+      <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Meet Up</h1>
+      <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">The only fake event planner you'll ever need</p>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="goTo('/create-account')">Sign Up</button>
+    </div>
+    <div *ngIf="currentUser">
+      <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Hey, {{currentUser.firstname}}</h1>
+      <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">Get started planning your fake events</p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <button *ngIf="currentUser" class="create-event-fab" (click)="goTo('/create-event')" ngbTooltip="Create a new event" placement="top">
+    <i class="fa fa-plus"></i><span class="sr-only">Create an event</span>
+  </button>
+  <p *ngIf="currentUser">&nbsp;</p>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label for="filter"></label>
+        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId"> 
+        <br>
+      </div>
+    </div>
+  </div>
+  <div class="list-group">
+    <div *ngFor="let event of events" class="row">
+      <div class="col-8">
+        <a [routerLink]="['/event', event.id]" class="list-group-item list-group-item-action">
+          <span>{{setStartDate(event.start)}}</span>
+          <h5 class="list-group-item-heading">{{event.name}}</h5>
+          <p class="list-group-item-text"><i class="fa fa-map-marker"></i> {{event.location}} <br>
+            <small><i class="fa fa-users"></i> {{event.guests.length}} people are going</small>
+          </p>
+        </a>
+      </div>
+      <div class="col-4">
+        <button *ngIf="event.isMine" class="btn btn-primary btn-sm">
+          Modify
+        </button>
+        <button *ngIf="event.isMine" class="btn btn-danger btn-sm">
+          Delete
+        </button>
+        <button class="btn btn-warning btn-sm" [routerLink]="['/event', event.id]">
+          Show details
+        </button>
+        <br>
+        <button *ngIf="!event.isMine" class="btn btn-success btn-sm">
+          Accept
+        </button>
+        <button *ngIf="!event.isMine" class="btn btn-warning btn-sm">
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="jumbotron create-account">
+  <div class="container">
+  </div>
+</div>
+<div class="container">
+  <div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 600px;">
+    <form autocomplete="on" (ngSubmit)="onSubmit()" [formGroup]="accountCreateForm">
+      <div class="card-block">
+        <h4 class="card-title">Create an account</h4>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" [class.has-warning]="!firstname.valid && firstname.touched" [class.has-success]="firstname.valid && firstname.touched">
+              <label class="col-form-label" for="firstname">First name</label>
+              <input [formControl]="accountCreateForm.controls['firstname']" [class.form-control-warning]="!firstname.valid && firstname.touched" [class.form-control-success]="firstname.valid" type="text" class="form-control" name="firstname" id="firstname" required myAutofocus>
+              <div [hidden]="firstname.valid || !firstname.touched"  class="form-control-feedback">First name is required.</div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" [class.has-warning]="!lastname.valid && lastname.touched" [class.has-success]="lastname.valid && lastname.touched">
+              <label class="col-form-label" for="lastname">Last name</label>
+              <input [formControl]="accountCreateForm.controls['lastname']" [class.form-control-warning]="!lastname.valid && lastname.touched" [class.form-control-success]="lastname.valid" type="text" class="form-control" name="lastname" id="lastname" required>
+              <div [hidden]="lastname.valid || !lastname.touched"  class="form-control-feedback">Last name is required.</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" [class.has-warning]="!email.valid && email.touched" [class.has-success]="email.valid && email.touched">
+          <label class="col-form-label" for="email">Email</label>
+          <input [formControl]="accountCreateForm.controls['email']" [class.form-control-warning]="!email.valid && email.touched" [class.form-control-success]="email.valid" type="email" class="form-control" name="email" id="email" required>
+          <div [hidden]="!email.hasError('invalidEmail') || !email.touched"  class="form-control-feedback">A valid email is required.</div>
+        </div>
+        <div class="form-group" [class.has-warning]="!password.valid && password.touched" [class.has-success]="password.valid">
+          <label class="col-form-label" for="password">Password</label>
+          <input [formControl]="accountCreateForm.controls['password']" [class.form-control-warning]="!password.valid && password.touched" [class.form-control-success]="password.valid" type="password" class="form-control" name="password" id="password" required>
+          <div [hidden]="!password.hasError('invalidLength') || !password.touched" class="form-control-feedback">Must be between 8-100 characters in length.</div>
+          <div [hidden]="!password.hasError('missingLowercase') || !password.touched" class="form-control-feedback">Must contain a lowercase letter.</div>
+          <div [hidden]="!password.hasError('missingUppercase') || !password.touched" class="form-control-feedback">Must contain an uppercase letter.</div>
+          <div [hidden]="!password.hasError('missingNumber') || !password.touched" class="form-control-feedback">Must contain a number.</div>
+          <div [hidden]="!password.hasError('missingSymbol') || !password.touched" class="form-control-feedback">Must contain one of the following symbols (!, @, #, $, %, ^, &, *).</div>
+          <small [hidden]="password.touched" class="form-text text-muted">Must be between 8-100 characters, contain an uppercase letter, contain a lowercase letter, contain a number and one of the following symbols (!, @, #, $, %, ^, &, *).</small>
+        </div>
+        <div class="form-group" [class.has-warning]="accountCreateForm.hasError('passwordMismatch') && verifyPassword.touched || !verifyPassword.valid && verifyPassword.touched" [class.has-success]="!accountCreateForm.hasError('passwordMismatch') && verifyPassword.value.length">
+          <label class="col-form-label" for="verifyPassword">Verify password</label>
+          <input [formControl]="accountCreateForm.controls['verifyPassword']" [class.form-control-warning]="accountCreateForm.hasError('passwordMismatch') && verifyPassword.touched || !verifyPassword.valid && verifyPassword.touched" [class.form-control-success]="!accountCreateForm.hasError('passwordMismatch')" type="password" class="form-control" name="verifyPassword" id="verifyPassword" required>
+          <div [hidden]="!accountCreateForm.hasError('passwordMismatch') || !verifyPassword.touched" class="form-control-feedback">Passwords must match.</div>
+          <div [hidden]="verifyPassword.valid || !verifyPassword.touched"  class="form-control-feedback">Password must be verified.</div>
+
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio <small class="text-muted">(optional)</small></label>
+          <textarea [formControl]="accountCreateForm.controls['bio']" name="bio" class="form-control" id="bio" rows="3"></textarea>
+          <small class="form-text text-muted">Tell people about yourself.</small>
+        </div>
+        <button type="submit" [disabled]="!accountCreateForm.valid" class="btn btn-primary btn-lg btn-block" id="createAccount">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
