@@ -14,9 +14,10 @@ export class EventDetailComponent implements OnInit {
   constructor(private eventService: EventService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    
+     
        this.event=this.eventService
-       .getCurrentEvent(this.route.snapshot.params['id']);
+       .getCurrentEvent(this.route.snapshot.params['id']); 
+       console.log(this.event);
   }
 
   viewDirections(url) {

@@ -17,8 +17,11 @@ export class Event {
   endDate: Object;
   mapLink: string;
   mapImage: string;
+  privateEvent: boolean;
+  isMine: boolean;
+  
 
-  constructor(id, user, name, eventType, host, start, end, location, guests, message, mapLink) {
+  constructor(id, user, name, eventType, host, start, end, location, guests, message, mapLink, privateEvent, isMine) {
     this.id = id;
     this.user = user;
     this.name = name;
@@ -37,5 +40,7 @@ export class Event {
       moment: moment(end).format('MMMM Do YYYY [at] hh:mm a'),
       raw: end
     };
+    this.privateEvent=privateEvent;
+    this.isMine=isMine;
   }
 }

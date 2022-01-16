@@ -98,7 +98,7 @@ export class CreateEventComponent implements OnInit {
 
   onSubmit() {
     let eventId = this.events.length + 1;
-    let event = new Event(eventId, this.currentUser, this.name.value, this.eventType.value, this.host.value, this.start.value, this.end.value, this.location.value,null, this.message.value, this.googleMaps.getPlace().url);
+    let event = new Event(eventId, this.currentUser, this.name.value, this.eventType.value, this.host.value, this.start.value, this.end.value, this.location.value,null, this.message.value, this.googleMaps.getPlace().url, null, null);
     this.eventService.addEvent(event);
     this.router.navigate(['/']);
   }

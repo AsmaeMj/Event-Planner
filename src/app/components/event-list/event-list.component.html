@@ -23,7 +23,7 @@
     <div class="col-8">
       <div class="form-group">
         <label for="filter"></label>
-        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId"> 
+        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)"> 
         <br>
       </div>
     </div>
@@ -40,10 +40,10 @@
         </a>
       </div>
       <div class="col-4">
-        <button *ngIf="event.isMine" class="btn btn-primary btn-sm">
+        <button *ngIf="event.isMine" class="btn btn-primary btn-sm" [routerLink]="['event', event.id,'modify']">
           Modify
         </button>
-        <button *ngIf="event.isMine" class="btn btn-danger btn-sm">
+        <button *ngIf="event.isMine" class="btn btn-danger btn-sm" (click)="deleteEvent(event.id)">
           Delete
         </button>
         <button class="btn btn-warning btn-sm" [routerLink]="['/event', event.id]">
@@ -60,3 +60,4 @@
     </div>
   </div>
 </div>
+

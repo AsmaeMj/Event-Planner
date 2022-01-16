@@ -118,7 +118,35 @@ export class EventListComponent implements OnInit {
     }, 300);
   }
 
-  setStartDate(date){
+  setStartDate(date) {
     return moment(date).format('MMMM Do YYYY [at] hh:mm a');
+  }
+
+  onKey(event: any) { // without type info
+    var query = event.target.value;
+    console.log(query);
+    this.events=(query) ? this.querySearch(query) : this.eventService.getEvents();  
+  }
+
+  createFilterFor(query) {
+      var lowercaseQuery = String(query).toLowerCase().split(' ');
+      return function filterFn(item) {
+        var label = String(item.name +';'+ item.eventType).toLowerCase().split(' ').join('');
+        for(var element of lowercaseQuery)
+        {
+          if(!label.includes(element))
+            return false;
+          console.log(element);
+        }
+        return true;
+      };
+    }
+
+  querySearch (query) {
+    return  query ? this.eventService.getEvents().filter(this.createFilterFor(query) ) : [];
+  }
+
+  deleteEvent(id){
+    this.events = this.eventService.deleteEvent(id);
   }
 }

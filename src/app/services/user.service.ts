@@ -22,7 +22,7 @@ export class UserService {
 
   public userIsLoggedIn(): boolean {
     //return this.user ? true : false;
-    return true;
+   return true;
   }
 }
 
