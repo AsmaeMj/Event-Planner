@@ -12,11 +12,11 @@ footer {
 }
 
 .hero-header {
-    text-shadow: 2px 2px 1px #fff;
+    text-shadow: 2px 2px 1px rgb(24, 24, 24);
 }
 
 .hero-tag {
-    text-shadow: 1px 1px 0 #fff;
+    text-shadow: 1px 1px 0 rgb(15, 15, 15);
 }
 
 .jumbotron {

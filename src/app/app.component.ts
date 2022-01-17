@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { initScrollListener,backToTop } from './shared/resources';
 import { User } from './models/user.model';
 import { UserService } from './services/user.service';
 
@@ -31,21 +32,17 @@ export class AppComponent {
 
   ngOnInit() {
     this.getCurrentUser();
-    this.scrollToTop();
+    initScrollListener();
+  }
+
+  backToTop(){
+    backToTop();
   }
 
   signUp() {
     this.router.navigate(['/create-account']);
   }
 
-  scrollToTop() {
-    this.router.events.subscribe((evt) => {
-        if (!(evt instanceof NavigationEnd)) {
-            return;
-        }
-        document.body.scrollTop = 0;
-    });
-  }
 
   getCurrentUser() {
     this.userService.getUser().subscribe(user => {
@@ -74,4 +71,5 @@ export class AppComponent {
     } else {
       this.menuAnimation = 'out';
     }
-  }}
+  }
+}

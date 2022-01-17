@@ -4,7 +4,7 @@
     <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="currentUser">Explore upcoming meet ups.</p>
     <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="!currentUser">Sign up to add events.</p>-->
     <div *ngIf="!currentUser">
-      <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">
+      <h1 [@title]="titleAnimation" style="opacity: 0; color:blueviolet" class="hero-header">
         Meet Up
       </h1>
       <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">
@@ -14,6 +14,7 @@
         type="button"
         class="btn btn-secondary btn-lg"
         (click)="goTo('/create-account')"
+        style="background-color: #563d7cef;"
       >
         Sign Up
       </button>
@@ -40,7 +41,23 @@
   </button>
   <p *ngIf="currentUser">&nbsp;</p>
   <div class="row">
-    <div class="col-8">
+    <div class="col-5 " style="margin: 10px 0px 0px 0px">
+      <ul class="nav nav-tabs" style="margin: 10px;">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" (click)="getEvents()">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Created</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" (click)="getInvitedEvents()">Invited</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Accepted</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-3">
       <div class="form-group">
         <label for="filter"></label>
         <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)"> 

@@ -8,53 +8,7 @@ import { Event } from '../models/event.model';
 })
 export class EventService {
 
-
-  private events: Array<Event> = [];
-  public eventsObservable : BehaviorSubject<Event | undefined |null> ;
-  // private currentEvent: Event;
-  public currentEventObservable : BehaviorSubject<Event | undefined |null> ;
-  private seed: Array<any> = this.getSeed();
-
-  constructor() {
-    this.seed.forEach((obj) => {
-      let event = new Event(obj.id, obj.user, obj.name, obj.eventType, obj.host, obj.start, obj.end, obj.location, obj.guests, obj.message, obj.mapLink, obj.privateEvent, obj.isMine);
-      this.events.push(obj);
-    });
-
-//    this.updateEvents(this.events);
-  }
-
-  addEvent(event: Event): void {
-    this.events.push(event);
-    //this.updateEvents(this.events);
-  }
-
-  // updateEvents(events) {
-  //   this.eventsObservable.next(events);
-  // }
-
-  getEvents() {
-    return this.getSeed();
-  }
-
-  getCurrentEvent(id) {
-    let eventId = +id;
-    var event = _.find(this.events, { 'id': eventId });
-    return event;
-    //this.currentEventObservable.next(event);
-    //return this.currentEventObservable.asObservable();
-  }
-
-  deleteEvent(id){
-    var xx=this.events.findIndex(el=>{el.id===id});
-    this.events.splice(xx, 1);
-    console.log(this.events.splice(xx, 1))
-    return this.events;
-  }
-
-  getSeed() {
-    return [
-      {
+  private events: Array<any> = [{
         id: 1,
         user: { firstname: 'Phil', lastname: 'Merrell', email: 'philbot5000@gmail.com', bio: '' },
         end: '2016-09-29T22:00',
@@ -159,6 +113,45 @@ export class EventService {
         isMine: false
       }
     ];
+  public eventsObservable : BehaviorSubject<Event | undefined |null> ;
+  public currentEventObservable : BehaviorSubject<Event | undefined |null> ;
+  constructor() {
+    this.events.forEach((obj) => {
+      let event = new Event(obj.id, obj.user, obj.name, obj.eventType, obj.host, obj.start, obj.end, obj.location, obj.guests, obj.message, obj.mapLink, obj.privateEvent, obj.isMine);
+      this.events.push(obj);
+    });
+
+//    this.updateEvents(this.events);
+  }
+  getEvents() {
+    return this.events;
+  }
+  addEvent(event: Event): void {
+    this.events.push(event);
+    //this.updateEvents(this.events);
+  }
+
+  // updateEvents(events) {
+  //   this.eventsObservable.next(events);
+  // }
+
+
+  getCurrentEvent(id) {
+    let eventId = +id;
+    var event = _.find(this.events, { 'id': eventId });
+    return event;
+    //this.currentEventObservable.next(event);
+    //return this.currentEventObservable.asObservable();
+  }
+
+  deleteEvent(id){
+    var xx=this.events.findIndex(el=>{el.id===id});
+    this.events.splice(xx, 1);
+    console.log(this.events.splice(xx, 1))
+    return this.events;
+  }
+  getInvitedEvents(){
+    return [];
   }
 
 }

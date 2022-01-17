@@ -15,6 +15,7 @@ export class CreateAccountComponent implements OnInit {
   accountCreateForm: FormGroup;
   firstname: AbstractControl;
   lastname: AbstractControl;
+  username: AbstractControl;
   email: AbstractControl;
   password: AbstractControl;
   verifyPassword: AbstractControl;
@@ -24,14 +25,16 @@ export class CreateAccountComponent implements OnInit {
     this.accountCreateForm = fb.group({
       'firstname'           : ['', Validators.required],
       'lastname'           : ['', Validators.required],
+      'username'        : ['', Validators.required],
       'email'           : ['', emailValidator],
       'password'        : ['', [lengthValidator, lowercaseValidator, uppercaseValidator, numberValidator, symbolValidator]],
       'verifyPassword'  : ['', Validators.required],
       'bio'             : ['']
     }, { validator: matchPasswords('password', 'verifyPassword') });
 
-    this.firstname          = this.accountCreateForm.controls['firstname'];
-    this.lastname          = this.accountCreateForm.controls['lastname'];
+    this.firstname      = this.accountCreateForm.controls['firstname'];
+    this.lastname       = this.accountCreateForm.controls['lastname'];
+    this.username       = this.accountCreateForm.controls['username'];
     this.email          = this.accountCreateForm.controls['email'];
     this.password       = this.accountCreateForm.controls['password'];
     this.verifyPassword = this.accountCreateForm.controls['verifyPassword'];
@@ -41,7 +44,7 @@ export class CreateAccountComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    let user = new User(this.firstname.value, this.lastname.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null);
+    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null);
     this.userService.setUser(user);
     this.router.navigate(['/']);
   }

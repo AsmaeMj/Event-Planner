@@ -9,9 +9,10 @@ export class User {
   bio: string;
   userMeetingStatus: any;
 
-  constructor(firstname, lastname, email, password, verifyPassword, bio, userMeetingStatus) {
+  constructor(firstname, lastname,username, email, password, verifyPassword, bio, userMeetingStatus) {
     this.firstname = firstname;
     this.lastname = lastname;
+    this.username = username;
     this.email = email;
     this.password = password;
     this.verifyPassword = verifyPassword;

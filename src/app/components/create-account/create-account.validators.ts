@@ -46,3 +46,10 @@ export function matchPasswords(p1: string, p2: string) {
         } 
     }
 }
+
+export function ValidateUsername(control: FormControl) : any {
+    // if (control.value.length < 8 || control.value.length > 100) {
+    // return {invalidLength: true}
+    // }
+}
+

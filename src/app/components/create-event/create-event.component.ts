@@ -25,7 +25,7 @@ export class CreateEventComponent implements OnInit {
   location: AbstractControl;
   message: AbstractControl;
   guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
-
+  proposedDates=[new Date()];
 
   currentUser: User;
   events:any;
@@ -102,5 +102,7 @@ export class CreateEventComponent implements OnInit {
     this.eventService.addEvent(event);
     this.router.navigate(['/']);
   }
-
+  addProposedDate(){
+    this.proposedDates.push(new Date());
+  }
 }
