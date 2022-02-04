@@ -16,12 +16,17 @@ import { EventDetailComponent } from './components/event-detail/event-detail.com
 import { EventModifyComponent } from './components/event-modify/event-modify.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from './components/login/login.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 const routes: Routes = [
 { path: '', component: EventListComponent },
+{ path: 'event-list/:ifOk', component: EventListComponent },
 {path: 'event/:id', component: EventDetailComponent},
 { path: 'create-account', component: CreateAccountComponent },
+{ path: 'login', component: LoginComponent },
 { path: 'create-event', component: CreateEventComponent, canActivate: [ AuthRouteGuardService ] },
 { path: 'event/:id/modify', component: EventModifyComponent },
 ];
@@ -38,6 +43,7 @@ const routes: Routes = [
     EventModifyComponent,
     HeaderComponent,
     FooterComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,9 @@ const routes: Routes = [
     HttpClientModule,
     AppRoutingModule,
     RouterModule.forRoot(routes),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgbModule,
+    NgSelectModule
   ],
   
   providers: [UserService, AuthRouteGuardService],

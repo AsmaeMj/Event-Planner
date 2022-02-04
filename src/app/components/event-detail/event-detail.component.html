@@ -6,9 +6,9 @@
         <i class="fa fa-map fa-2x" aria-hidden="true"></i><span class="sr-only">View location on Google Maps</span>
       </button>
     <div class="card-block">
-      <h2 class="card-title">{{event.name}} <span class="event-type-tag">{{event.eventType}}</span></h2>
-      <small class="">Hosted by {{event.host}}</small><br>
-      <small class="text-muted">{{event.start}} to {{event.end}}
+      <h2 class="card-title">{{event.title}} <span class="event-type-tag"></span></h2>
+      <small >Hosted by {{getCreatorEvent(event).username}}</small><br>
+      <small class="text-muted">{{event.date_debut}} to {{event.date_fin}}
 
       <!-- <p>
         <i class="fa fa-map-marker"></i>
@@ -16,17 +16,17 @@
         <span *ngIf="mapLink === ''" class="">{{event.location}}</span>
       </p> -->
       </small>
-      <div *ngIf="event.message !== ''">
+      <div *ngIf="event.description !== ''">
         <h5>Info</h5>
-        <p class="lead">{{event.message}}</p>
+        <p class="lead">{{event.description}}</p>
       </div>
       <h5>Guest list</h5>
       <p class="lead">
-        <span *ngFor="let guest of event.guests; let l = last">{{guest}}<span *ngIf="!l">,</span> </span>
+        <span *ngFor="let guest of event.userEventStatus">{{guest.user.username}}, </span>
       </p>
       <h5>Event creator</h5>
-      <p class="lead">
-        {{event.user.firstname}} {{event.user.lastname}}
+      <p class="lead" *ngFor="let guested of event.userEventStatus" >
+        <span *ngIf="guested.statut===1">{{guested.user.username}} </span>
       </p>
       <!--<pre>{{event | json}}</pre>-->
     </div>

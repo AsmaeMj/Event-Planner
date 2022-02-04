@@ -1,46 +1,44 @@
 import * as moment from 'moment';
 import { User } from './user.model';
+import { Typeevents } from './typeEvents.model';
+import { UserMeeting } from './userMeeting.model';
 
 export class Event {
 
   id: number;
-  user: User;
-  name: string;
-  eventType: string;
-  host: string;
-  start: string;
-  end: string;
-  location: any;
-  guests: Array<string>;
-  message: string;
-  startDate: Object;
-  endDate: Object;
-  mapLink: string;
-  mapImage: string;
-  privateEvent: boolean;
-  isMine: boolean;
+  title: string;
+  adresse: any;
+  description: string;
+  date_debut: Date;
+  date_fin: Date;
+  typeEvent: Typeevents;
+  file: string;
+  userEventStatus: Array<UserMeeting>
+
+  // privateEvent: boolean;
+  // isMine: boolean;
   
 
-  constructor(id, user, name, eventType, host, start, end, location, guests, message, mapLink, privateEvent, isMine) {
+  constructor(id, title, adresse, description, date_debut, date_fin, typeEvent, file, userEventStatus) {
     this.id = id;
-    this.user = user;
-    this.name = name;
-    this.eventType = eventType;
-    this.host = host;
-    this.location = location;
-    this.mapLink = mapLink;
-    this.guests = guests;
-    this.message = message;
-    this.mapImage = 'https://maps.googleapis.com/maps/api/staticmap?center=' + encodeURIComponent(location) + '&scale=2&zoom=14&size=640x640&maptype=roadmap&key=AIzaSyC5-1er5cL2OCpfYLu7rVzt_bmRJHb9Uck';
-    this.startDate = {
-      moment: moment(start).format('MMMM Do YYYY [at] hh:mm a'),
-      raw: start
-    };
-    this.endDate = {
-      moment: moment(end).format('MMMM Do YYYY [at] hh:mm a'),
-      raw: end
-    };
-    this.privateEvent=privateEvent;
-    this.isMine=isMine;
+    this.title = title;
+    this.typeEvent = typeEvent;
+    this.adresse = adresse;
+    this.description = description;
+    this.date_debut = date_debut;
+    this.date_fin = date_fin;
+    this.file = file;
+    this.userEventStatus = userEventStatus;
+    //this.mapImage = 'https://maps.googleapis.com/maps/api/staticmap?center=' + encodeURIComponent(adresse) + '&scale=2&zoom=14&size=640x640&maptype=roadmap&key=AIzaSyC5-1er5cL2OCpfYLu7rVzt_bmRJHb9Uck';
+    // this.date_debut = {
+    //   moment: moment(start).format('MMMM Do YYYY [at] hh:mm a'),
+    //   raw: start
+    // };
+    // this.date_fin = {
+    //   moment: moment(end).format('MMMM Do YYYY [at] hh:mm a'),
+    //   raw: end
+    // };
+    // this.privateEvent=privateEvent;
+    // this.isMine=isMine;
   }
 }

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
+
 
 @Component({
   selector: 'app-home',
@@ -27,15 +29,18 @@ export class HomeComponent implements OnInit {
   titleAnimation: string = 'fadeOutUp';
   fadeAnimation: string = 'fadeOut';
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router,private authenticationService: JwtAuthenticationService, private userService: UserService) {}
 
   ngOnInit() {
+    if(this.authenticationService.isUserLoggedIn()) {
     this.userService.getUser().subscribe(user => {
       this.currentUser = user;
+      console.log(this.currentUser);
       return this.currentUser;
     });
     this.triggerHomeAnimation();
-  }
+  }else console.log('not logged in')
+}
 
   goTo(url) {
     this.router.navigate([url]);

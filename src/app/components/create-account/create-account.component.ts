@@ -20,12 +20,15 @@ export class CreateAccountComponent implements OnInit {
   password: AbstractControl;
   verifyPassword: AbstractControl;
   bio: AbstractControl;
+  invalidRegister: boolean = false;
+  invalidRegisterMessage: string = "The username you selected already exisits. Please register with a new username";
+  
 
   constructor(fb: FormBuilder, private userService: UserService, private router: Router) {
     this.accountCreateForm = fb.group({
       'firstname'           : ['', Validators.required],
       'lastname'           : ['', Validators.required],
-      'username'        : ['', Validators.required],
+      'username'        : ['', ],
       'email'           : ['', emailValidator],
       'password'        : ['', [lengthValidator, lowercaseValidator, uppercaseValidator, numberValidator, symbolValidator]],
       'verifyPassword'  : ['', Validators.required],
@@ -45,7 +48,28 @@ export class CreateAccountComponent implements OnInit {
 
   onSubmit() {
     let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null);
-    this.userService.setUser(user);
+    this.userService.setUser(user).subscribe(
+      data => {
+        this.handleSuccessfulRegister(data);
+      },
+      error => {
+        this.handleUnsuccessfulRegister(error);
+      }
+    )
     this.router.navigate(['/']);
+  }
+
+  handleSuccessfulRegister(data) {
+    alert("Successfully registered a new user")
+    console.log("Successfully registered a new user");
+    console.log(data);
+    this.router.navigate(['login']);
+  }
+
+  handleUnsuccessfulRegister(error) {
+    this.invalidRegister = true;
+    alert("Oops. Error while trying to register a new user. Try again ")
+    console.log("Oops. Error while trying to register a new user. Try again ");
+    console.log(error);
   }
 }

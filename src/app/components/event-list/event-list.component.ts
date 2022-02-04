@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { User } from 'src/app/models/user.model';
@@ -7,6 +7,8 @@ import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/models/event.model';
 import * as moment from 'moment';
+import { result } from 'lodash';
+import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
 
 @Component({
   selector: 'app-event-list',
@@ -25,32 +27,75 @@ import * as moment from 'moment';
     ])
   ]
 })
+
 export class EventListComponent implements OnInit {
 
   currentUser: User;
   events: any;
   titleAnimation: string = 'fadeOutUp';
   fadeAnimation: string = 'fadeOut';
-
-  constructor(private router: Router, private userService: UserService, private eventService: EventService) { }
+  activedTab:string="all";
+  createdok: any;
+  constructor(private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.getEvents();
     this.getUser();
+    this.getEvents();
     this.triggerViewAnimation();
+    if(this.route.snapshot.params['ifOk']){
+      this.activedTab="created";
+    }
   }
 
   getEvents() {
-    this.events=this.eventService.getEvents();
+    //this.events=this.eventService.getEvents();
+    this.activedTab="all";
+    this.eventService.getEventsFromBackEnd().subscribe(result=>{
+      this.events=result;
+      console.log(result);
+    })
   }
 
   getInvitedEvents(){
-    this.events=this.eventService.getInvitedEvents();
+    let username= this.authenticationService.getAuthenticatedUser();
+    this.eventService.getInvitedEvents(username).subscribe(events=>{
+      console.log("invited event",events);
+      this.events=events;
+    }),error=>{
+      console.log(error)
+    };
+    this.activedTab="invited";
   }
+
+  getCreatedEvents(){
+    let username= this.authenticationService.getAuthenticatedUser();
+    this.eventService.getCreatedEvents(username).subscribe(events=>{
+      console.log("invited event",events);
+      this.events=events;
+    }),error=>{
+      console.log(error)
+    };
+    this.activedTab="created";
+  }
+
+  getAcceptedEvents(){
+    let username= this.authenticationService.getAuthenticatedUser();
+    this.eventService.getAcceptedEvents(username).subscribe(events=>{
+      console.log("invited event",events);
+      this.events=events;
+    }),error=>{
+      console.log(error)
+    };
+    this.activedTab="accepted";
+  }
+
   getUser() {
-    this.userService.getUser().subscribe(user => {
-      this.currentUser = user;
-    });
+    if(this.authenticationService.isUserLoggedIn()) {
+      this.userService.getUser().subscribe(user => {
+        this.currentUser = user;
+        console.error('testhamza', this.currentUser);
+      });
+    }else console.log('not logged in')
   }
 
   goTo(url, param) {

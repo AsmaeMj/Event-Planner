@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { dateValidator, endDateIsBeforeStartDateValidator } from './create-event.validators';
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormArray, FormControl } from '@angular/forms';
+import { datesValidator, dateValidator, endDateIsBeforeStartDateValidator } from './create-event.validators';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
 import { Event } from 'src/app/models/event.model';
+import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
+import { Typeevents } from 'src/app/models/typeEvents.model';
+import { UserMeeting } from 'src/app/models/userMeeting.model';
+
 
 @Component({
   selector: 'app-create-event',
@@ -15,94 +19,244 @@ import { Event } from 'src/app/models/event.model';
 })
 export class CreateEventComponent implements OnInit {
 
-  createEventForm: FormGroup;
-  name: AbstractControl;
-  eventType: AbstractControl;
-  host: AbstractControl;
-  start: AbstractControl;
-  end: AbstractControl;
-  guests: AbstractControl;
-  location: AbstractControl;
-  message: AbstractControl;
-  guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
-  proposedDates=[new Date()];
+  // createEventForm: FormGroup;
+  // name: AbstractControl;
+  // eventType: AbstractControl;
+  // host: AbstractControl;
+  // start: AbstractControl;
+  // end: AbstractControl;
+  // guests: AbstractControl;
+  // location: AbstractControl;
+  // message: AbstractControl;
+  // guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
+  // currentUser: User;
+  
+   meeting: Event;
+   allUsernames;
+   search1 = '';
+   meetingInvitees: Array<string> = [];
+   allUsers: Array<User> = [];
+   alltypeevents: Array<Typeevents>=[];
+   alltypeeventsname: Array<string>=[];
+   selected_type_event_name: string;
+   ifOk: Boolean;
 
-  currentUser: User;
-  events:any;
-
+   usernameOfCurrentlyLoggedInUser : string;
+ // events:any;
+  dates:FormArray;
+  
   constructor(
-    private fb: FormBuilder,
+    //private fb: FormBuilder,
     private googleMaps: GoogleMapsService,
     private eventService: EventService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private authenticationService: JwtAuthenticationService,
   ) {}
 
   ngOnInit() {
-    this.getCurrentUser();
-    this.getEvents();
-    this.buildForm();
+    this.meeting = new Event(-1, "", "", "", "","",{id:-1,name:""},"",[]);
+
+    //this.getCurrentUser();
+    this.getAllRegisteredUsers();
+    this.getAlltypes();
+    //this.getEvents();
+    //this.buildForm();
+    this.usernameOfCurrentlyLoggedInUser = this.authenticationService.getAuthenticatedUser();
+
   }
 
-  buildForm() {
-    this.googleMaps.initAutoComplete();
-    this.createEventForm = this.fb.group({
-      'name'      : ['', Validators.required],
-      'eventType' : ['', Validators.required],
-      'host'      : ['', Validators.required],
-      'start'     : ['', [ dateValidator, Validators.required ]],
-      'end'       : ['', [ dateValidator, Validators.required ]],
-     // 'guests'    : [''],
-      'location'  : [''],
-      'message'   : ['']
-    }, { validator: endDateIsBeforeStartDateValidator('start', 'end') } );
+  getAllRegisteredUsers(){
+    this.userService.getAllUsers().subscribe(
+      response=>{
+        console.log( response );
+        this.allUsers = response;
+        this.allUsernames = this.extractAllUsernamesFromUsers( response );
+      },
+      error=>console.log(error)
+    )
+  }
+  extractAllUsernamesFromUsers( response ){
+    let res = [];
 
-    this.name = this.createEventForm.controls['name'];
-    this.eventType = this.createEventForm.controls['eventType'];
-    this.host = this.createEventForm.controls['host'];
-    this.start = this.createEventForm.controls['start'];
-    this.end = this.createEventForm.controls['end'];
-    this.guests = this.createEventForm.controls['guests'];
-    this.location = this.createEventForm.controls['location'];
-    this.message = this.createEventForm.controls['message'];
-    this.guests.patchValue([]);
+    for(let oneUser of response)
+      res.push(oneUser.username);
+
+    return res;
   }
 
-  checkGuestList(item) {
-    this.guestsTouched = true;
+  private getAlltypes() {
+    this.eventService.gettypeevents().subscribe(
+        response=>{
+          this.alltypeevents=response;
+          console.log( response );
+          this.alltypeeventsname = this.extractnameFromTypeevents( response );
+        },
+        error=>console.log(error)
+    )
   }
 
-  getCurrentUser() {
-    this.userService.getUser().subscribe(user => {
-      this.currentUser = user;
-    });
+  extractnameFromTypeevents( response ){
+    let res = [];
+
+    for(let oneType of response)
+      res.push(oneType.name);
+
+    return res;
   }
+
+  saveMeeting(){
+    console.log("The line below contains all the meeting invitees");
+    console.log(this.meetingInvitees);
+
+    // console.log(this.meeting.time);
+    let username = this.authenticationService.getAuthenticatedUser();
+    //ajouter le type devenement selectionner dans l'object
+    this.meeting.typeEvent={id:this.alltypeevents.find(x=>x.name==this.selected_type_event_name).id,name:this.selected_type_event_name}
+    //ajout des utilisateurs
+    this.meeting.userEventStatus = this.createUserMeetingStatusFromUsernames();
+    console.log("this meeting= ",this.meeting);
+    this.eventService.createNewMeeting(this.meeting, username).subscribe(
+      response=>this.handleSuccessfulResponse(response),
+      error=>console.log(error)
+    )
+  }
+
+  createUserMeetingStatusFromUsernames(){
+    let res = [];
+
+    // Add the meeting organizer to a list of invitees. Ideally, meeting should have two different type of
+    // users. One should be the meeting organizer while the other type of users should be the meeting
+    //attendees. But, this fix is better than not including the meeting organizer in the meeting at all
+
+    for( let oneUsername of this.meetingInvitees ){
+      for( let oneUser of this.allUsers ){
+        if(oneUser.username == oneUsername){
+          // res.push( oneUser );
+          //let userMeetingKey = new UserMeetingKey( oneUser.id, -1);
+            let userMeeting = new UserMeeting( null, oneUser, 1 ); //One means creator
+            console.log("usermeeting",userMeeting);
+            res.push( userMeeting );
+        }
+
+      }
+    }
+    return res;
+  }
+
+  handleSuccessfulResponse(response){
+    console.log("Successfully saved the meeting");
+    console.log( response );
+    //[ngClass]="{'active-tab':activedTab==='created'}" (click)="goTo('/event-list', $event)"
+    this.ifOk=true;
+    this.router.navigate([`/event-list/${this.ifOk}`]);
+  }
+
+  selectedStatic(result) {
+    this.search1 = result;
+    this.meetingInvitees.push(result);
+    console.log(this.meetingInvitees);
+  }
+
+  // buildForm() {
+  //   this.googleMaps.initAutoComplete();
+  //   this.createEventForm = this.fb.group({
+  //     'name'      : ['', Validators.required],
+  //     'eventType' : ['', Validators.required],
+  //     'host'      : ['', Validators.required],
+  //     'start'     : ['', [ dateValidator, Validators.required ]],
+  //     'end'       : ['', [ dateValidator, Validators.required ]],
+  //      dates: this.fb.array([ this.createItemDate() ]),
+  //    // 'guests'    : [''],
+  //     'location'  : [''],
+  //     'message'   : ['']
+  //   }, { validator: endDateIsBeforeStartDateValidator('start', 'end') } );
+
+  //   this.name = this.createEventForm.controls['name'];
+  //   this.eventType = this.createEventForm.controls['eventType'];
+  //   this.host = this.createEventForm.controls['host'];
+  //   this.start = this.createEventForm.controls['start'];
+  //   this.end = this.createEventForm.controls['end'];
+  //   this.guests = this.createEventForm.controls['guests'];
+  //   this.location = this.createEventForm.controls['location'];
+  //   this.message = this.createEventForm.controls['message'];
+  //   this.guests.patchValue([]);
+  // }
+
+  // checkGuestList(item) {
+  //   this.guestsTouched = true;
+  // }
+
+  // getCurrentUser() {
+  //   //this.usernameOfCurrentlyLoggedInUser = this.authenticationService.getAuthenticatedUser();
+  //   if(this.authenticationService.isUserLoggedIn()) {
+  //   this.userService.getUser().subscribe(user => {
+  //     this.currentUser = user;
+  //   });}
+  //   else
+  //   console.log('not logged in')
+  // }
+
+  // getAllRegisteredUsers(){
+  //   this.userService.getAllUsers().subscribe(
+  //     response=>{
+  //       console.log( response );
+  //       this.allUsers = response;
+  //       this.allUsernames = this.extractAllUsernamesFromUsers( response );
+
+  //     },
+  //     error=>console.log(error)
+  //   )
+  // }
+  // private getAlltypes() {
+  //   this.meetingDataService.gettypeevents().subscribe(
+  //       response=>{
+  //         this.alltypeevents=response;
+  //         console.log( response );
+  //         this.alltypeeventsname = this.extractnameFromTypeevents( response );
+  //       },
+  //       error=>console.log(error)
+  //   )
+  // }
 
   geolocate() {
     this.googleMaps.geolocate();
   }
 
-  updateEndTime() {
-    this.end.setValue(this.start.value);
-  }
+  // updateEndTime() {
+  //   this.end.setValue(this.start.value);
+  // }
 
-  getEvents() {
-    this.events=this.eventService.getEvents();
-  }
+  // getEvents() {
+  //   this.events=this.eventService.getEvents();
+  // }
 
   updateLocationValue() {
-    console.log('update location value')
     let locationValue = (<HTMLInputElement>document.getElementById('location')).value;
-    this.location.setValue(locationValue);
+    this.meeting.adresse.setValue(locationValue);
   }
 
-  onSubmit() {
-    let eventId = this.events.length + 1;
-    let event = new Event(eventId, this.currentUser, this.name.value, this.eventType.value, this.host.value, this.start.value, this.end.value, this.location.value,null, this.message.value, this.googleMaps.getPlace().url, null, null);
-    this.eventService.addEvent(event);
-    this.router.navigate(['/']);
-  }
-  addProposedDate(){
-    this.proposedDates.push(new Date());
-  }
+  // onSubmit() {
+  //   let eventId = this.events.length + 1;
+  //   let event = new Event(eventId, this.currentUser, this.name.value, this.eventType.value, this.host.value, this.start.value, this.end.value, this.location.value,null, this.message.value, this.googleMaps.getPlace().url, null, null);
+  //   this.eventService.addEvent(event);
+  //   console.error(this.getDates());
+  //   this.router.navigate(['/']);
+  // }
+  // addProposedDate(){
+  //     this.dates = this.createEventForm.get('dates') as FormArray;
+  //     this.dates.push(this.createItemDate());
+  //     console.log(this.dates);
+    
+  //   }  
+
+
+  // createItemDate(): FormGroup{
+  //     return this.fb.group({
+  //       start: new FormControl(''),
+  //       end: new FormControl('')     });
+  //   }
+  //   getDates() {
+  //     return (<FormArray>this.createEventForm.get('dates')).value;
+  //   }
 }

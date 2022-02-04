@@ -3,7 +3,7 @@
     <!--<h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">Events</h1>
     <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="currentUser">Explore upcoming meet ups.</p>
     <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="!currentUser">Sign up to add events.</p>-->
-    <div *ngIf="!currentUser">
+    <div *ngIf="!authenticationService.isUserLoggedIn()">
       <h1 [@title]="titleAnimation" style="opacity: 0; color:blueviolet" class="hero-header">
         Meet Up
       </h1>
@@ -13,15 +13,15 @@
       <button
         type="button"
         class="btn btn-secondary btn-lg"
-        (click)="goTo('/create-account')"
-        style="background-color: #563d7cef;"
+        (click)="goTo('/login')"
+        style="background-color: #b9618b; box-shadow: 2px 2px 1px rgb(186 192 220);"
       >
-        Sign Up
+        Sign In
       </button>
     </div>
-    <div *ngIf="currentUser">
+    <div *ngIf="authenticationService.isUserLoggedIn()">
       <h1 [@title]="titleAnimation" style="opacity: 0" class="hero-header">
-        Hey, {{ currentUser.firstname }}
+        Hey, {{ currentUser.username }}
       </h1>
       <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">
         Get started planning your fake events
@@ -31,7 +31,7 @@
 </div>
 <div class="container">
   <button
-    *ngIf="currentUser"
+    *ngIf="authenticationService.isUserLoggedIn()"
     class="create-event-fab"
     (click)="goTo('/create-event')"
     ngbTooltip="Create a new event"
@@ -39,21 +39,21 @@
   >
     <i class="fa fa-plus"></i><span class="sr-only">Create an event</span>
   </button>
-  <p *ngIf="currentUser">&nbsp;</p>
-  <div class="row">
-    <div class="col-5 " style="margin: 10px 0px 0px 0px">
-      <ul class="nav nav-tabs" style="margin: 10px;">
+  <p *ngIf="authenticationService.isUserLoggedIn()">&nbsp;</p>
+  <div class="row justify-content-md-center">
+    <div class="col-5 ">
+      <ul class="nav nav-tabs" style="margin-top: 20px;">
         <li class="nav-item">
-          <a class="nav-link active" href="#" (click)="getEvents()">All</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='all'}"  href="#" (click)="getEvents()">All</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Created</a>
+        <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='created'}"  href="#" (click)="getCreatedEvents()">Created</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="getInvitedEvents()">Invited</a>
+        <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='invited'}" href="#" (click)="getInvitedEvents()">Invited</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Accepted</a>
+        <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='accepted'}" href="#" (click)="getAcceptedEvents()">Accepted</a>
         </li>
       </ul>
     </div>
@@ -66,46 +66,54 @@
       </div>
     </div>
   </div>
-  <div class="list-group">
-    <div *ngFor="let event of events" class="row">
-      <div class="col-8">
-        <a
-          [routerLink]="['/event', event.id]"
-          class="list-group-item list-group-item-action"
-        >
-          <span>{{ setStartDate(event.start) }}</span>
-          <h5 class="list-group-item-heading">{{ event.name }}</h5>
-          <p class="list-group-item-text">
-            <i class="fa fa-map-marker"></i> {{ event.location }} <br />
-            <small
-              ><i class="fa fa-users"></i> {{ event.guests.length }} people are
-              going</small
-            >
-          </p>
-        </a>
+  <div class="row justify-content-md-center" *ngFor="let event of events">
+      <div class=" col-8 list-group" style="margin-bottom: 10px; margin: 0px 0px 0px 0px">
+        <div class=" list-group-item card-event " style="margin-bottom: 5px;">
+          <div class="row"> 
+            <div class="col-11">
+              <a class="list-group-item list-group-item-action"
+              [routerLink]="['/event', event.id]"
+              style="border: 0px; padding: 0%;"
+              >
+              <span>{{event.date_debut}}</span>
+                <!-- <span>{{ setStartDate(event.date_debut) }}</span> -->
+                <h5 class="list-group-item-heading">{{ event.title }}</h5>
+                <p class="list-group-item-text">
+                  <i class="fa fa-map-marker"></i> {{ event.adresse }} <br />
+                  <small
+                    ><i class="fa fa-users"></i> {{ event.userEventStatus.length }} people are
+                    going</small
+                  >
+                </p>
+              </a>
+            </div>
+            <div class="col-1 icon-event ">
+              <!-- <a href="#" class="btn btn-outline-primary btn-sm" placement="top" ngbTooltip="Add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <i class="fa fa-plus"></i>            
+              </a> -->
+              <a *ngIf="event.isMine" [routerLink]="['event', event.id,'modify']" class="btn btn-outline-info btn-sm" placement="top" ngbTooltip="Edit">
+                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                  <i class="fa fa-pencil"></i>           
+              </a>
+              <a [routerLink]="['/event', event.id]" class="btn btn-outline-success btn-sm" placement="top" ngbTooltip="View">
+                  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                  <i class="fa fa-eye"></i>           
+              </a>
+              <a *ngIf="event.isMine" (click)="deleteEvent(event.id)" class="btn btn-outline-danger btn-sm" placement="top" ngbTooltip="Delete">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  <i class="fa fa-trash"></i>            
+              </a>
+              <a *ngIf="!event.isMine" class="btn btn-outline-success btn-sm" ngbTooltip="Accept">
+                <i class="fa fa-check"></i>
+              </a>
+              <a *ngIf="!event.isMine" class="btn btn-outline-danger btn-sm" ngbTooltip="Decline">
+                <i class="fa fa-times"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="col-4">
-        <button *ngIf="event.isMine" class="btn btn-primary btn-sm" [routerLink]="['event', event.id,'modify']">
-          Modify
-        </button>
-        <button *ngIf="event.isMine" class="btn btn-danger btn-sm" (click)="deleteEvent(event.id)">
-          Delete
-        </button>
-        <button
-          class="btn btn-warning btn-sm"
-          [routerLink]="['/event', event.id]"
-        >
-          Show details
-        </button>
-        <br />
-        <button *ngIf="!event.isMine" class="btn btn-success btn-sm">
-          Accept
-        </button>
-        <button *ngIf="!event.isMine" class="btn btn-warning btn-sm">
-          Decline
-        </button>
-      </div>
-    </div>
   </div>
 </div>
-

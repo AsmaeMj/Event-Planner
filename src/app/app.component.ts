@@ -4,6 +4,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { initScrollListener,backToTop } from './shared/resources';
 import { User } from './models/user.model';
 import { UserService } from './services/user.service';
+import { JwtAuthenticationService } from './services/jwt-authentication.service';
+
 
 @Component({
   selector: 'app-root',
@@ -24,17 +26,14 @@ import { UserService } from './services/user.service';
   ]
 })
 export class AppComponent {
-  currentUser: User;
-  hideNav: boolean = true;
-  menuAnimation: string = 'in';
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(/*private router: Router,private authenticationService: JwtAuthenticationService, private userService: UserService*/) {}
 
   ngOnInit() {
-    this.getCurrentUser();
+   /* this.getCurrentUser();*/
     initScrollListener();
   }
-
+/*
   backToTop(){
     backToTop();
   }
@@ -45,16 +44,22 @@ export class AppComponent {
 
 
   getCurrentUser() {
+    if(this.authenticationService.isUserLoggedIn()) {
     this.userService.getUser().subscribe(user => {
       this.currentUser = user;
-      console.log(user);
-      return this.currentUser;
-    });
+    },
+    error => {
+      alert(error);
+    });}
+    else
+    alert('not logged in')
   }
 
   logOut() {
+    this.authenticationService.logout();
     this.userService.setUser(null);
     this.router.navigate(['/']);
+    alert('succesfully logged out!')
   }
 
   goTo(url, event) {
@@ -71,5 +76,8 @@ export class AppComponent {
     } else {
       this.menuAnimation = 'out';
     }
+  }*/
+  backToTop(){
+    backToTop();
   }
 }

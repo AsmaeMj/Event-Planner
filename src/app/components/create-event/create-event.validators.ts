@@ -17,3 +17,8 @@ export function endDateIsBeforeStartDateValidator(p1, p2) {
     };
 }
 
+
+export function datesValidator (control: Array<FormControl>) {
+    console.log("dates validatorsssssss");
+    return false;
+}

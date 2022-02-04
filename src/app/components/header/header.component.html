@@ -1,0 +1,51 @@
+<header id="navbar" class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar" style="background-color: #563d7c; padding-left:20px ;">
+
+    <a class="navbar-brand mr-0 mr-md-2 hidden-sm-up" href style="color: #fff;" (click)="goTo('/', $event)">
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+      &emsp;My Scheduler
+    </a>
+  
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item">
+        <a class="nav-link" href="#aboutus">
+          About Us
+        </a>
+      <!-- </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#features">
+          Features
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#reviews">
+          Reviews
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contactus">
+          Contact Us
+        </a>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link active" *ngIf="authenticationService.isUserLoggedIn()" href (click)="goTo('/create-event', $event)" >
+          Create Event
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!authenticationService.isUserLoggedIn()" (click)="goTo('/create-account', $event)">
+          Sign Up 
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!authenticationService.isUserLoggedIn()" (click)="goTo('/login', $event)" >
+          Login
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " *ngIf="authenticationService.isUserLoggedIn()" (click)="logOut()">
+          Logout
+        </a>
+      </li>
+    </ul>
+  </header>

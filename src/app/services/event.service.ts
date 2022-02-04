@@ -1,12 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Event } from '../models/event.model';
+import { Typeevents } from '../models/typeEvents.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
+
 
   private events: Array<any> = [{
         id: 1,
@@ -115,17 +118,16 @@ export class EventService {
     ];
   public eventsObservable : BehaviorSubject<Event | undefined |null> ;
   public currentEventObservable : BehaviorSubject<Event | undefined |null> ;
-  constructor() {
-    this.events.forEach((obj) => {
-      let event = new Event(obj.id, obj.user, obj.name, obj.eventType, obj.host, obj.start, obj.end, obj.location, obj.guests, obj.message, obj.mapLink, obj.privateEvent, obj.isMine);
-      this.events.push(obj);
-    });
+  constructor(private httpClient:HttpClient) {
+    // this.events.forEach((obj) => {
+    //   let event = new Event(obj.id, obj.user, obj.name, obj.eventType, obj.host, obj.start, obj.end, obj.location, obj.guests, obj.message, obj.mapLink, obj.privateEvent, obj.isMine);
+    //   this.events.push(obj);
+    // });
 
 //    this.updateEvents(this.events);
   }
-  getEvents() {
-    return this.events;
-  }
+ 
+  
   addEvent(event: Event): void {
     this.events.push(event);
     //this.updateEvents(this.events);
@@ -137,21 +139,42 @@ export class EventService {
 
 
   getCurrentEvent(id) {
-    let eventId = +id;
-    var event = _.find(this.events, { 'id': eventId });
-    return event;
+    // let eventId = +id;
+    // var event = _.find(this.events, { 'id': eventId });
+    // return event;
     //this.currentEventObservable.next(event);
     //return this.currentEventObservable.asObservable();
+    return this.httpClient.get("http://localhost:8080/events/"+id);
   }
 
   deleteEvent(id){
-    var xx=this.events.findIndex(el=>{el.id===id});
-    this.events.splice(xx, 1);
-    console.log(this.events.splice(xx, 1))
+    this.events.splice(this.events.findIndex(el=>el.id==id), 1);
+    return this.events;
+  
+}
+  getInvitedEvents(username){
+    return this.httpClient.get("http://localhost:8080/"+username+"/events/pending");
+  }
+  getCreatedEvents(username){
+    return this.httpClient.get("http://localhost:8080/"+username+"/events/created");
+  }
+  getAcceptedEvents(username){
+    return this.httpClient.get("http://localhost:8080/"+username+"/events/accepted");
+  }
+  getEvents(){
     return this.events;
   }
-  getInvitedEvents(){
-    return [];
+
+  getEventsFromBackEnd(){
+    return this.httpClient.get("http://localhost:8080/events");
   }
 
+  gettypeevents() {
+    return this.httpClient.get<Typeevents[]>("http://localhost:8080/gettypeevents");
+  }
+
+  createNewMeeting(meeting: Event, username: String){
+    // let listOfAttendees: Array<User> = meeting.listOfAttendees;
+    return this.httpClient.post<Event>(`http://localhost:8080/${username}/events/add`, meeting );
+  }
 }
