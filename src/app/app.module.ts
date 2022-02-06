@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthRouteGuardService } from './shared/auth-route-guard.service';
 import { UserService } from './services/user.service';
@@ -19,6 +19,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { HttpInterceptorService } from './services/http/http-interceptor.service';
 
 
 const routes: Routes = [
@@ -57,7 +58,7 @@ const routes: Routes = [
     NgSelectModule
   ],
   
-  providers: [UserService, AuthRouteGuardService],
+  providers: [UserService, AuthRouteGuardService, {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

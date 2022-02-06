@@ -144,7 +144,7 @@ export class EventService {
     // return event;
     //this.currentEventObservable.next(event);
     //return this.currentEventObservable.asObservable();
-    return this.httpClient.get("http://localhost:8080/events/"+id);
+    return this.httpClient.get<Event>("http://localhost:8080/events/"+id);
   }
 
   deleteEvent(id){

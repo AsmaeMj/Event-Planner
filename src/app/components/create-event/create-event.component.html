@@ -83,9 +83,10 @@
       <input type="datetime-local" name="time" class="form-control" [(ngModel)]="meeting.date_fin" required>
     </fieldset>
 
-    <ng-select [items]="alltypeeventsname"  placeholder="type d'evenement:" appendTo="body"  searchable="true" name="type_event"
-               [(ngModel)]="selected_type_event_name">
-    </ng-select>
+    <select style="z-index: 2000;" placeholder="type d'evenement:" appendTo="body"  searchable="true" name="type_event"
+               [(ngModel)]="selected_type_event_name" >
+               <option *ngFor="let typeevent of alltypeeventsname"  [value]="typeevent"> {{typeevent}} </option>
+    </select>
 
     <fieldset>
       <label>Description:</label>
@@ -98,9 +99,9 @@
       <!-- <div [hidden]="location.valid || !location.touched" class="form-control-feedback">A location is required.</div> -->
     </fieldset>
 
-    <ng-select [items]="allUsernames"  placeholder="Invite people:" appendTo="body" multiple="true" searchable="true" name="usernames-of-invitees"
+    <!-- <select style="z-index: 2000;" [items]="allUsernames"  placeholder="Invite people:" appendTo="body" multiple="true" searchable="true" name="usernames-of-invitees"
       [(ngModel)]="meetingInvitees">
-    </ng-select>
+    </select> -->
 
     <button type="submit" class="btn btn-success">Done</button>
 

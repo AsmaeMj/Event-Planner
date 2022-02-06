@@ -63,7 +63,7 @@ export class CreateEventComponent implements OnInit {
     //this.getEvents();
     //this.buildForm();
     this.usernameOfCurrentlyLoggedInUser = this.authenticationService.getAuthenticatedUser();
-
+    console.log("3333")
   }
 
   getAllRegisteredUsers(){
@@ -233,7 +233,7 @@ export class CreateEventComponent implements OnInit {
 
   updateLocationValue() {
     let locationValue = (<HTMLInputElement>document.getElementById('location')).value;
-    this.meeting.adresse.setValue(locationValue);
+    this.meeting.adresse = locationValue;
   }
 
   // onSubmit() {
