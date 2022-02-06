@@ -89,13 +89,27 @@ export class EventListComponent implements OnInit {
     this.activedTab="accepted";
   }
 
+  getRejectedEvents(){
+    let username= this.authenticationService.getAuthenticatedUser();
+    this.eventService.getRejectedEvents(username).subscribe(events=>{
+      console.log("invited event",events);
+      this.events=events;
+    }),error=>{
+      console.log(error)
+    };
+    this.activedTab="Rejected";
+  }
+
   getUser() {
     if(this.authenticationService.isUserLoggedIn()) {
       this.userService.getUser().subscribe(user => {
         this.currentUser = user;
         console.error('testhamza', this.currentUser);
       });
-    }else console.log('not logged in')
+    }else{
+      this.router.navigate(["/login"]);
+      alert('not logged in')
+    } 
   }
 
   goTo(url, param) {

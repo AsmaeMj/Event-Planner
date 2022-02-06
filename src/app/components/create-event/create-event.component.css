@@ -1,5 +1,5 @@
 .jumbotron.create-event {
-    background-image: url('./../../../assets/bg5.jpg');
+    background-image: url('./../../../assets/bg13.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -27,5 +27,3 @@
     display: inline-block;
 }
 
-.guest-tag button {
-}

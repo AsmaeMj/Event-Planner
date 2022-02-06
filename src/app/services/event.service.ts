@@ -161,6 +161,10 @@ export class EventService {
   getAcceptedEvents(username){
     return this.httpClient.get("http://localhost:8080/"+username+"/events/accepted");
   }
+  getRejectedEvents(username){
+    return this.httpClient.get("http://localhost:8080/"+username+"/events/rejected");
+  }
+
   getEvents(){
     return this.events;
   }

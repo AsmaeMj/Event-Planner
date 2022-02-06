@@ -55,6 +55,9 @@
         <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
           <a class="nav-link" [ngClass]="{'active-tab':activedTab==='accepted'}" href="#" (click)="getAcceptedEvents()">Accepted</a>
         </li>
+        <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='Rejected'}" href="#" (click)="getRejectedEvents()">Rejected</a>
+        </li>
       </ul>
     </div>
     <div class="col-3">

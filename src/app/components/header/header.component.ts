@@ -36,8 +36,10 @@ export class HeaderComponent implements OnInit {
     error => {
       alert(error);
     });}
-    else
-    console.log('not logged in')
+    else{
+      this.router.navigate(["/login"]);
+      alert('not logged in')
+    }
   }
 
   logOut() {
