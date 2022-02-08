@@ -14,12 +14,13 @@ export class Event {
   typeEvent: Typeevents;
   file: string;
   userEventStatus: Array<UserMeeting>
+  event_dates: any;
 
   // privateEvent: boolean;
   // isMine: boolean;
   
 
-  constructor(id, title, adresse, description, date_debut, date_fin, typeEvent, file, userEventStatus) {
+  constructor(id, title, adresse, description, date_debut, date_fin,event_dates, typeEvent, file, userEventStatus) {
     this.id = id;
     this.title = title;
     this.typeEvent = typeEvent;
@@ -27,6 +28,7 @@ export class Event {
     this.description = description;
     this.date_debut = date_debut;
     this.date_fin = date_fin;
+    this.event_dates = event_dates;
     this.file = file;
     this.userEventStatus = userEventStatus;
     //this.mapImage = 'https://maps.googleapis.com/maps/api/staticmap?center=' + encodeURIComponent(adresse) + '&scale=2&zoom=14&size=640x640&maptype=roadmap&key=AIzaSyC5-1er5cL2OCpfYLu7rVzt_bmRJHb9Uck';

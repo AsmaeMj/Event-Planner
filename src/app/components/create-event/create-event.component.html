@@ -1,13 +1,14 @@
 <div class="jumbotron create-event">
   <div class="container">
-    <h1 style="font-family: cursive; font-style: oblique; font-weight: bold; color: rgb(144, 73, 216);">Start creating your event</h1>
+    <h1 style="font-family: cursive; font-style: oblique; font-weight: bold; color: #212529;">Start creating your event</h1>
+    <!-- <h1 style=" font-style: oblique; color: #212529; text-align: center;">Start creating your event</h1> -->
   </div>
 </div>
-<div class="container">
-  <div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 600px;">
-    <form autocomplete="on" [formGroup]="createEventForm" novalidate>
+<div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 600px;">
+  <div class="card-header">Schedule Meeting</div>
+  <div class="card-body">
+    <form class="row g-3" autocomplete="on" [formGroup]="createEventForm" novalidate>
       <div class="card-block">
-        <h4 class="card-title">Create an event</h4>
         <div>
           <div class="form-group">
             <div class="form-check form-check-inline">
@@ -22,7 +23,10 @@
           <div class="form-group" [class.has-warning]="!name.valid && name.touched" [class.has-success]="name.valid && name.touched">
             <label class="col-form-label" for="name">Event name</label>
             <input [formControl]="createEventForm.controls['name']" [class.form-control-warning]="!name.valid && name.touched" [class.form-control-success]="name.valid" type="name" class="form-control" name="name" id="name" required myAutofocus>
-            <div [hidden]="name.valid || !name.touched"  class="form-control-feedback">An event name is required.</div>
+            <div [hidden]="name.valid || !name.touched" style="color: red; font-size: small;" class="form-control-feedback">An event name is required.</div>
+            <!-- <div [hidden]="name.valid || !name.touched"  class="form-control-feedback" class="alert alert-primary" role="alert">
+              An event name is required.
+            </div> -->
           </div>
           <div class="form-group" [class.has-warning]="!eventType.valid && eventType.touched" [class.has-success]="eventType.valid && eventType.touched">
             <label for="eventType">Select an event type</label>
@@ -36,7 +40,7 @@
             name="type_event"
             [(ngModel)]="selected_type_event_name">
             </ng-select>
-            <div [hidden]="eventType.valid || !eventType.touched"  class="form-control-feedback">An event type is required.</div>
+            <div [hidden]="eventType.valid || !eventType.touched"  class="form-control-feedback" style="color: red; font-size: small;">An event type is required.</div>
           </div>
           <!-- <div class="form-group" [class.has-warning]="!host.valid && host.touched" [class.has-success]="host.valid && host.touched">
             <label class="col-form-label" for="host">Event host</label>
@@ -44,40 +48,115 @@
             <div [hidden]="host.valid || !host.touched"  class="form-control-feedback">An event host is required.</div>
             <small class="form-text text-muted">This could be a person or company name.</small>
           </div> -->
-          <!-- <button (click)="addProposedDate()"><i class="fa fa-plus"></i></button> -->
-          <!-- <div  formArrayName="dates" *ngFor="let item of createEventForm.get('dates')['controls']; let i = index;" >
-           <div [formGroupName]="i"> 
-            <label class="col-form-label" for="startdate{{i}}">Start date {{i+1}}</label>
-             <input formControlName="start" type="datetime-local" class="form-control" placeholder="start date {{i+1}}" name="startdate{{i}}" />
-             <label class="col-form-label"for="enddate{{i}}">END date {{i+1}}</label>
-             <input formControlName="end" type="datetime-local" class="form-control"  placeholder="end date {{i+1}}" name="enddate{{i}}"/>
+          <div class="form-group">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="DatesRadioOptions" id="DatesRadio1" value="One Date" (click)="setRadio('One Date')" [checked]="true" >
+              <label class="form-check-label" for="DatesRadio1">One Date</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="DatesRadioOptions" id="DatesRadio2" (click)="setRadio('Multiple dates')" value="Multiple dates">
+              <label class="form-check-label" for="inlineRadio2">Multiple dates</label>
+            </div>
           </div>
-          </div> -->
 
-          <div class="row">
+          <div *ngIf="isSelected('One Date')" class="row">
             <div class="col-xs-12 col-sm-6">
               <div class="form-group" [class.has-warning]="!start.valid && start.touched" [class.has-success]="start.valid && start.touched">
                 <label class="col-form-label" for="start">Start time</label>
                 <input [formControl]="createEventForm.controls['start']" [class.form-control-warning]="!start.valid && start.touched" [class.form-control-success]="start.valid" (change)="updateEndTime()" type="datetime-local" class="form-control" name="start" id="start" required>
-                <div [hidden]="start.valid || !start.touched || start.hasError('invalidDate')"  class="form-control-feedback">A valid start time is required.</div>
-                <div [hidden]="!start.hasError('invalidDate') || !start.touched" class="form-control-feedback">Start time can't be in the past.</div>
+                <div [hidden]="start.valid || !start.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid start time is required.</div>
+                <div [hidden]="!start.hasError('invalidDate') || !start.touched" style="color: red; font-size: small;" class="form-control-feedback">Start time can't be in the past.</div>
               </div>
             </div>
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-6"> 
               <div class="form-group" [class.has-warning]="createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || !end.valid && end.touched" [class.has-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || end.valid && end.touched">
                 <label class="col-form-label" for="end">End time</label>
                 <input [formControl]="createEventForm.controls['end']" [class.form-control-warning]="createEventForm.hasError('endDateIsBeforeStartDate') || !end.valid && end.touched" [class.form-control-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.valid" type="datetime-local" class="form-control" name="end" id="end" required>
-                <div [hidden]="end.valid || !end.touched || start.hasError('invalidDate')"  class="form-control-feedback">A valid end time is required.</div>
-                <div [hidden]="!end.hasError('invalidDate') || !end.touched" class="form-control-feedback">End time cannot be in the past.</div>
-                <div [hidden]="!createEventForm.hasError('endDateIsBeforeStartDate') || !end.touched" class="form-control-feedback">End time must be greater than start time.</div>
+                <div [hidden]="end.valid || !end.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid end time is required.</div>
+                <div [hidden]="!end.hasError('invalidDate') || !end.touched" style="color: red; font-size: small;" class="form-control-feedback">End time cannot be in the past.</div>
+                <div [hidden]="!createEventForm.hasError('endDateIsBeforeStartDate') || !end.touched"style="color: red; font-size: small;" class="form-control-feedback">End time must be greater than start time.</div>
               </div>
             </div>
           </div>
 
+          <div *ngIf="isSelected('Multiple dates')">
+            <button (click)="addProposedDate()"><i class="fa fa-plus"></i></button>
+            <div  formArrayName="dates" *ngFor="let item of createEventForm.get('dates')['controls']; let i = index;" >
+              <div [formGroupName]="i" class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <div class="form-group">
+                    <label class="col-form-label" for="start{{i}}">Start date {{i+1}}</label>
+                    <input formControlName="start" type="datetime-local" class="form-control" placeholder="start date {{i+1}}" name="start{{i}}" type="datetime-local"  name="start" id="start" >
+                    
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6"> 
+                  <div class="form-group" >
+                    <label class="col-form-label"for="end{{i}}">End date {{i+1}}</label>
+                    <input formControlName="end" type="datetime-local" class="form-control"  placeholder="end date {{i+1}}" name="end{{i}}"  type="datetime-local"  name="end" id="end" >
+                    </div>
+                </div>
+              </div>
+              {{item.value | json}}
+
+            </div>
+          </div>
+
+          <!-- <div *ngIf="isSelected('Multiple dates')">
+            <button (click)="addProposedDate()"><i class="fa fa-plus"></i></button>
+            <div  formArrayName="dates" *ngFor="let item of createEventForm.get('dates')['controls']; let i = index;" >
+              <div [formGroupName]="i" class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <div class="form-group" [class.has-warning]="!start.valid && start.touched" [class.has-success]="start.valid && start.touched">
+                    <label class="col-form-label" for="start{{i}}">Start date {{i+1}}</label>
+                    <input formControlName="start" type="datetime-local" class="form-control" placeholder="start date {{i+1}}" name="start{{i}}" [class.form-control-warning]="!start.valid && start.touched" [class.form-control-success]="start.valid" (change)="updateEndTime()" type="datetime-local" class="form-control" name="start" id="start" required>
+                    <div [hidden]="start.valid || !start.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid start time is required.</div>
+                    <div [hidden]="!start.hasError('invalidDate') || !start.touched" style="color: red; font-size: small;" class="form-control-feedback">Start time can't be in the past.</div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6"> 
+                  <div class="form-group" [class.has-warning]="createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || !end.valid && end.touched" [class.has-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || end.valid && end.touched">
+                    <label class="col-form-label"for="end{{i}}">End date {{i+1}}</label>
+                    <input formControlName="end" type="datetime-local" class="form-control"  placeholder="end date {{i+1}}" name="end{{i}}" [class.form-control-warning]="createEventForm.hasError('endDateIsBeforeStartDate') || !end.valid && end.touched" [class.form-control-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.valid" type="datetime-local" class="form-control" name="end" id="end" required>
+                    <div [hidden]="end.valid || !end.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid end time is required.</div>
+                    <div [hidden]="!end.hasError('invalidDate') || !end.touched" style="color: red; font-size: small;" class="form-control-feedback">End time cannot be in the past.</div>
+                    <div [hidden]="!createEventForm.hasError('endDateIsBeforeStartDate') || !end.touched"style="color: red; font-size: small;" class="form-control-feedback">End time must be greater than start time.</div>
+                  </div>
+                </div>
+              </div>
+              {{item.value | json}}
+
+            </div>
+          </div> -->
+
+          <!-- <div  formArrayName="dates" *ngFor="let item of createEventForm.get('dates')['controls']; let i = index;" >
+            <div [formGroupName]="i">
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label class="col-form-label" for="startdate{{i}}">Start date {{i+1}}</label>
+                  <input formControlName="startdate" type="datetime-local" class="form-control" placeholder="start date {{i+1}}" name="startdate{{i}}"[formControl]="item['startdate']" [class.form-control-warning]="item.touched && !item.valid " type="datetime-local" class="form-control" id="startdate" required>
+                  <div [hidden]="item.valid || !item.touched" style="color: red; font-size: small;" class="form-control-feedback">A valid start time is required.</div>
+                  <div [hidden]="!item.hasError('invalidDate') || !item.touched" style="color: red; font-size: small;" class="form-control-feedback">Start time can't be in the past.</div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6"> 
+                <div class="form-group" [class.has-warning]="createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || !end.valid && end.touched" [class.has-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || end.valid && end.touched">
+                  <label class="col-form-label"for="enddate{{i}}">END date {{i+1}}</label>
+                  <input formControlName="enddate" type="datetime-local" class="form-control"  placeholder="end date {{i+1}}" name="end{{i}}" [formControl]="createEventForm.controls['end']" [class.form-control-warning]="createEventForm.hasError('endDateIsBeforeStartDate') || !end.valid && end.touched" [class.form-control-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.valid" type="datetime-local" class="form-control" name="end{{i}}" id="end{{i}}" required>
+                  <div [hidden]="end.valid || !end.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid end time is required.</div>
+                  <div [hidden]="!end.hasError('invalidDate') || !end.touched" style="color: red; font-size: small;" class="form-control-feedback">End time cannot be in the past.</div>
+                  <div [hidden]="!createEventForm.hasError('endDateIsBeforeStartDate') || !end.touched"style="color: red; font-size: small;" class="form-control-feedback">End time must be greater than start time.</div>
+                </div>
+              </div> 
+            </div>
+            {{item.value | json}}
+
+          </div> -->
+
           <div class="form-group" [class.has-warning]="!location.valid && location.touched" [class.has-success]="location.valid && location.touched">
             <label class="col-form-label" for="location">Location</label>
             <input [formControl]="createEventForm.controls['location']" [class.form-control-warning]="!location.valid && location.touched" [class.form-control-success]="location.valid" class="form-control" id="location" placeholder="Enter an address" (focus)="geolocate()" (blur)="updateLocationValue()" type="text" required>
-            <div [hidden]="location.valid || !location.touched" class="form-control-feedback">A location is required.</div>
+            <div [hidden]="location.valid || !location.touched" style="color: red; font-size: small;" class="form-control-feedback">A location is required.</div>
           </div>
           
             <div class="form-group" [class.has-warning]="!guests.valid && guests.touched" [class.has-success]="guests.valid && guests.touched">
@@ -91,7 +170,7 @@
               [(ngModel)]="meetingInvitees"
               required></ng-select>
 
-              <div [hidden]="guests.valid || !guests.touched"  class="form-control-feedback">Guests are required to create events.</div>
+              <div [hidden]="guests.valid || !guests.touched" style="color: red; font-size: small;" class="form-control-feedback">Guests are required to create events.</div>
               <small class="form-text text-muted">To add multiple guests, type a name and hit the enter key.</small>
             </div>
           <div class="form-group">
@@ -99,54 +178,23 @@
             <textarea [formControl]="createEventForm.controls['message']" name="message" class="form-control" id="message" rows="3"></textarea>
             <small class="form-text text-muted">Would you like to give more information to your guests?</small>
           </div>
-          <button type="button" (click)="saveMeeting()"  class="btn btn-primary btn-lg btn-block">Submit</button>
+          <!-- <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck">
+              <label class="form-check-label" for="gridCheck">
+                Private Event
+              </label>
+            </div>
+          </div> -->
+          <div class="d-grid gap-2">
+            <!-- [disabled]="!createEventForm.valid -->
+            <button type="submit" class="btn btn-primary" (click)="saveMeeting() ">Submit</button>
+          </div>
         </div>
       </div>
     </form>
+    <div class="text-center" style="color: chocolate; font-size: small;">
+      All meeting participants will be sent an invite and you will be notified of their status.
+    </div>
   </div>
 </div>
-
-<!-- <div class="jumbotron create-event">
-  <div class="container">
-    <h1 style="color: white;">Start creating your event</h1>
-  </div>
-</div>
-<div class="container">
-  <form (ngSubmit)="!meetingForm.invalid && saveMeeting()" #meetingForm="ngForm">
-    <fieldset class="form-group">
-      <label>Title:</label>
-      <input type="text" name="title" class="form-control" [(ngModel)]="meeting.title" required>
-    </fieldset>
-
-    <fieldset class="form-group">
-      <label>date de debut:</label>
-      <input type="datetime-local" name="time" class="form-control" [(ngModel)]="meeting.date_debut" required>
-    </fieldset>
-
-    <fieldset class="form-group">
-      <label>date de fin:</label>
-      <input type="datetime-local" name="time" class="form-control" [(ngModel)]="meeting.date_fin" required>
-    </fieldset>
-
-    <ng-select [items]="alltypeeventsname"  placeholder="type d'evenement:" appendTo="body"  searchable="true" name="type_event"
-               [(ngModel)]="selected_type_event_name">
-    </ng-select>
-
-    <fieldset>
-      <label>Description:</label>
-      <input type="text" name="description" [(ngModel)]="meeting.description" class="form-control">
-    </fieldset>
-
-    <fieldset class="form-group" >
-      <label class="col-form-label" for="location">Location</label>
-      <input id="location" placeholder="Enter an address" (focus)="geolocate()" (blur)="updateLocationValue()" type="text" required>
-    </fieldset>
-
-    <ng-select [items]="allUsernames"  placeholder="Invite people:" appendTo="body" multiple="true" searchable="true" name="usernames-of-invitees"
-      [(ngModel)]="meetingInvitees">
-    </ng-select>
-
-    <button type="submit" class="btn btn-success">Done</button>
-
-  </form>
-</div> -->

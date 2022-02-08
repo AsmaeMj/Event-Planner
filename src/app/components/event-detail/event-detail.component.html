@@ -28,6 +28,10 @@
       <p class="lead" *ngFor="let guested of event.userEventStatus" >
         <span *ngIf="guested.statut===1">{{guested.user.username}} </span>
       </p>
+      <p class="lead" *ngFor="let dates of event.event_dates" >
+        <span >Date: From {{dates.start | date: 'medium'}} </span>
+        <span >To {{dates.end | date: 'medium'}} </span>
+      </p>
       <!--<pre>{{event | json}}</pre>-->
     </div>
   </div>

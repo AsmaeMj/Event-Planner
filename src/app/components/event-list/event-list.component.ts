@@ -34,26 +34,48 @@ export class EventListComponent implements OnInit {
   events: any;
   titleAnimation: string = 'fadeOutUp';
   fadeAnimation: string = 'fadeOut';
-  activedTab:string="all";
+  activedTab:string = "all";
   createdok: any;
   constructor(private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getUser();
-    this.getEvents();
     this.triggerViewAnimation();
-    if(this.route.snapshot.params['ifOk']){
-      this.activedTab="created";
-    }
+    this.getEvents(this.route.snapshot.params['ifOk']);
+    console.log(this.activedTab);
+    
   }
 
-  getEvents() {
+  getEvents(tab) {
     //this.events=this.eventService.getEvents();
-    this.activedTab="all";
-    this.eventService.getEventsFromBackEnd().subscribe(result=>{
-      this.events=result;
-      console.log(result);
-    })
+    switch(tab){
+      case "all":
+        this.eventService.getEventsFromBackEnd().subscribe(result=>{
+          this.events=result;
+          console.log(result);
+        })
+        this.activedTab="all";
+        break;
+      case "created":
+        this.getCreatedEvents();
+        break;
+      case "invited":
+        this.getInvitedEvents();
+        break;
+      case "accepted":
+        this.getAcceptedEvents();
+        break;
+      case "Rejected":
+        this.getRejectedEvents();
+        break;
+      default:
+        this.eventService.getEventsFromBackEnd().subscribe(result=>{
+          this.events=result;
+          console.log(result);
+        })
+        this.activedTab="all";
+        break;
+    }
   }
 
   getInvitedEvents(){
@@ -70,7 +92,7 @@ export class EventListComponent implements OnInit {
   getCreatedEvents(){
     let username= this.authenticationService.getAuthenticatedUser();
     this.eventService.getCreatedEvents(username).subscribe(events=>{
-      console.log("invited event",events);
+      console.log("created event",events);
       this.events=events;
     }),error=>{
       console.log(error)
@@ -81,7 +103,7 @@ export class EventListComponent implements OnInit {
   getAcceptedEvents(){
     let username= this.authenticationService.getAuthenticatedUser();
     this.eventService.getAcceptedEvents(username).subscribe(events=>{
-      console.log("invited event",events);
+      console.log("accepted event",events);
       this.events=events;
     }),error=>{
       console.log(error)
@@ -107,8 +129,8 @@ export class EventListComponent implements OnInit {
         console.error('testhamza', this.currentUser);
       });
     }else{
-      this.router.navigate(["/login"]);
-      alert('not logged in')
+      this.router.navigate(["/"]);
+      //alert('not logged in')
     } 
   }
 

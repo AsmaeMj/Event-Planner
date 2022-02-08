@@ -44,19 +44,19 @@
     <div class="col-5 ">
       <ul class="nav nav-tabs" style="margin-top: 20px;">
         <li class="nav-item">
-          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='all'}"  href="#" (click)="getEvents()">All</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='all'}"  href="#" (click)="getEvents('all')">All</a>
         </li>
         <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
-          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='created'}"  href="#" (click)="getCreatedEvents()">Created</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='created'}"  href="#" (click)="getEvents('created')">Created</a>
         </li>
         <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
-          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='invited'}" href="#" (click)="getInvitedEvents()">Invited</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='invited'}" href="#" (click)="getEvents('invited')">Invited</a>
         </li>
         <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
-          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='accepted'}" href="#" (click)="getAcceptedEvents()">Accepted</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='accepted'}" href="#" (click)="getEvents('accepted')">Accepted</a>
         </li>
         <li class="nav-item" *ngIf="authenticationService.isUserLoggedIn()">
-          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='Rejected'}" href="#" (click)="getRejectedEvents()">Rejected</a>
+          <a class="nav-link" [ngClass]="{'active-tab':activedTab==='Rejected'}" href="#" (click)="getEvents('Rejected')">Rejected</a>
         </li>
       </ul>
     </div>

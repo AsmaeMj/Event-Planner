@@ -18,7 +18,7 @@ import { UserMeeting } from 'src/app/models/userMeeting.model';
   styleUrls: ['./create-event.component.css']
 })
 export class CreateEventComponent implements OnInit {
-
+  DatesRadioOptions: String='One Date';
   createEventForm: FormGroup;
    name: AbstractControl;
    eventType: AbstractControl;
@@ -28,7 +28,7 @@ export class CreateEventComponent implements OnInit {
    guests: AbstractControl;
    location: AbstractControl;
    message: AbstractControl;
-   guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
+  //  guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
   // currentUser: User;
   
    meeting: Event;
@@ -39,11 +39,12 @@ export class CreateEventComponent implements OnInit {
    alltypeevents: Array<Typeevents>=[];
    alltypeeventsname: Array<string>=[];
    selected_type_event_name: string;
-   ifOk: Boolean;
-
+   ifOk: string = "all";
+   buttonDisable=true;
    usernameOfCurrentlyLoggedInUser : string;
  // events:any;
   dates:FormArray;
+
   
   constructor(
     private fb: FormBuilder,
@@ -55,7 +56,7 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.meeting = new Event(-1, "", "", "", "","",{id:-1,name:""},"",[]);
+    this.meeting = new Event(-1, "", "", "", "","",[],{id:-1,name:""},"",[]);
     //this.getCurrentUser();
     this.getAllRegisteredUsers();
     this.getAlltypes();
@@ -72,6 +73,7 @@ export class CreateEventComponent implements OnInit {
      // 'host'      : ['', Validators.required],
       'start'     : ['', [ dateValidator, Validators.required ]],
       'end'       : ['', [ dateValidator, Validators.required ]],
+      dates: this.fb.array([ this.createItemDate() ]),
       'guests'    : ['', Validators.required],
       'location'  : [''],
       'message'   : ['']
@@ -128,8 +130,10 @@ export class CreateEventComponent implements OnInit {
   }
 
   saveMeeting(){
+    console.error("dates:", this.dates.value);
     console.log("The line below contains all the meeting invitees");
     console.log(this.meetingInvitees);
+    this.meeting.event_dates = this.dates.value;
     this.meeting.title = this.name.value;
     this.selected_type_event_name = this.eventType.value;
     this.meeting.date_debut = this.start.value;
@@ -144,7 +148,7 @@ export class CreateEventComponent implements OnInit {
     console.log("this meeting= ",this.meeting);
     this.eventService.createNewMeeting(this.meeting, username).subscribe(
       response=>this.handleSuccessfulResponse(response),
-      error=>console.log(error)
+      error=>alert(error)
     )
   }
 
@@ -174,7 +178,7 @@ export class CreateEventComponent implements OnInit {
     console.log("Successfully saved the meeting");
     console.log( response );
     //[ngClass]="{'active-tab':activedTab==='created'}" (click)="goTo('/event-list', $event)"
-    this.ifOk=true;
+    this.ifOk="created";
     this.router.navigate([`/event-list/${this.ifOk}`]);
   }
 
@@ -202,20 +206,27 @@ export class CreateEventComponent implements OnInit {
     this.meeting.adresse = locationValue;
   }
 
-  // addProposedDate(){
-  //     this.dates = this.createEventForm.get('dates') as FormArray;
-  //     this.dates.push(this.createItemDate());
-  //     console.log(this.dates);
-    
-  //   }  
+  addProposedDate(){
+      this.dates = this.createEventForm.get('dates') as FormArray;
+      this.dates.push(this.createItemDate());
+      console.error(this.dates.value);
+  }
+  createItemDate(): FormGroup{
+      return this.fb.group({
+        start: new FormControl(''),
+        end: new FormControl('')     });
+  }
+  getDates() {
+    return (<FormArray>this.createEventForm.get('dates')).value;
+  }
 
-
-  // createItemDate(): FormGroup{
-  //     return this.fb.group({
-  //       start: new FormControl(''),
-  //       end: new FormControl('')     });
-  //   }
-  //   getDates() {
-  //     return (<FormArray>this.createEventForm.get('dates')).value;
-  //   }
+  setRadio(e:string){
+    this.DatesRadioOptions=e;
+  }
+  isSelected(name:string){
+    if(!this.DatesRadioOptions){
+      return false;
+    }
+    return (this.DatesRadioOptions === name);
+  }
 }
