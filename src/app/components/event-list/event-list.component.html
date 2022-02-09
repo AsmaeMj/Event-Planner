@@ -110,7 +110,7 @@
               <a *ngIf=" activedTab==='invited'" class="btn btn-outline-success btn-sm" (click)="acceptEvent(event)" ngbTooltip="Accept">
                 <i class="fa fa-check"></i>
               </a>
-              <a *ngIf="activedTab==='invited'" class="btn btn-outline-danger btn-sm" ngbTooltip="Decline">
+              <a *ngIf="activedTab==='invited'" class="btn btn-outline-danger btn-sm" (click)="declineEvent(event)" ngbTooltip="Decline">
                 <i class="fa fa-times"></i>
               </a>
             </div>

@@ -215,4 +215,12 @@ export class EventListComponent implements OnInit {
     // let meetingStatus: number = STATUS_ACCEPTED;
     this.updateMeetingStatus( meetingStatus, event );
   }
+
+  declineEvent(event: any) {
+    let meetingStatus: number = 4;
+    this.updateMeetingStatus( meetingStatus, event );
+
+
+
+  }
 }
