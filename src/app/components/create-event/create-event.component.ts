@@ -30,7 +30,7 @@ export class CreateEventComponent implements OnInit {
    message: AbstractControl;
   //  guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
   // currentUser: User;
-  
+
    meeting: Event;
    allUsernames;
    search1 = '';
@@ -44,8 +44,9 @@ export class CreateEventComponent implements OnInit {
    usernameOfCurrentlyLoggedInUser : string;
  // events:any;
   dates:FormArray;
+  private ismultipledates: Boolean;
 
-  
+
   constructor(
     private fb: FormBuilder,
     private googleMaps: GoogleMapsService,
@@ -130,14 +131,22 @@ export class CreateEventComponent implements OnInit {
   }
 
   saveMeeting(){
-    console.error("dates:", this.dates.value);
     console.log("The line below contains all the meeting invitees");
     console.log(this.meetingInvitees);
+    //si on a selectionne le choix multiple dates
+    if(this.isSelected('Multiple dates'))
     this.meeting.event_dates = this.dates.value;
+    else
+      this.meeting.event_dates=[];
+
     this.meeting.title = this.name.value;
     this.selected_type_event_name = this.eventType.value;
-    this.meeting.date_debut = this.start.value;
-    this.meeting.date_fin = this.end.value;
+    //si on a selectionne le choix one date
+    if(this.isSelected('One Date')){
+      this.meeting.date_debut = this.start.value;
+      this.meeting.date_fin = this.end.value;
+    }
+
     this.meeting.description = this.message.value;
     // console.log(this.meeting.time);
     let username = this.authenticationService.getAuthenticatedUser();

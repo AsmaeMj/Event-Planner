@@ -9,6 +9,7 @@ import { Event } from 'src/app/models/event.model';
 import * as moment from 'moment';
 import { result } from 'lodash';
 import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
+import {UserMeeting} from "../../models/userMeeting.model";
 
 @Component({
   selector: 'app-event-list',
@@ -43,7 +44,7 @@ export class EventListComponent implements OnInit {
     this.triggerViewAnimation();
     this.getEvents(this.route.snapshot.params['ifOk']);
     console.log(this.activedTab);
-    
+
   }
 
   getEvents(tab) {
@@ -131,12 +132,12 @@ export class EventListComponent implements OnInit {
     }else{
       this.router.navigate(["/"]);
       //alert('not logged in')
-    } 
+    }
   }
 
-  goTo(url, param) {
-    console.log(param);
-    this.router.navigate([url], param);
+  goTo(url) {
+    //console.log(param);
+    this.router.navigate([url]);
   }
 
   triggerViewAnimation() {
@@ -153,7 +154,7 @@ export class EventListComponent implements OnInit {
   onKey(event: any) { // without type info
     var query = event.target.value;
     console.log(query);
-    this.events=(query) ? this.querySearch(query) : this.eventService.getEvents();  
+    this.events=(query) ? this.querySearch(query) : this.eventService.getEvents();
   }
 
   createFilterFor(query) {
@@ -175,6 +176,43 @@ export class EventListComponent implements OnInit {
   }
 
   deleteEvent(id){
-    this.events = this.eventService.deleteEvent(id);
+    this.eventService.deleteEvent(id).subscribe(
+      data=>{
+        console.log("delete event response",data)
+        this.getCreatedEvents();
+      },
+      err=>console.log(err)
+    );
+
+  }
+
+  getUserMeetingStatusToUpdate( userMeetingList: Array<UserMeeting>, username: string ){
+    for( let oneUserMeeting of userMeetingList ){
+      if( oneUserMeeting.user.username == username )
+        return oneUserMeeting;
+    }
+
+    return null;
+  }
+  updateMeetingStatus( meetingStatus: number, event: Event ){
+    let username= this.authenticationService.getAuthenticatedUser();
+
+    let userMeetingStatusToUpdate = this.getUserMeetingStatusToUpdate( event.userEventStatus, username );
+    userMeetingStatusToUpdate.statut = meetingStatus;
+
+    this.eventService.changeMeetingStatus( username, userMeetingStatusToUpdate ).subscribe(
+      response=>{
+        console.log(response);
+        // console.log("Successfully changed the meeting status to", response.meetingStatus );
+        this.getCreatedEvents();
+      },
+      error=> console.log( error )
+    );
+  }
+
+  acceptEvent(event: any) {
+    let meetingStatus: number = 3;
+    // let meetingStatus: number = STATUS_ACCEPTED;
+    this.updateMeetingStatus( meetingStatus, event );
   }
 }

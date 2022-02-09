@@ -5,7 +5,7 @@
     <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag" *ngIf="!currentUser">Sign up to add events.</p>-->
     <div *ngIf="!authenticationService.isUserLoggedIn()">
       <h1 [@title]="titleAnimation" style="opacity: 0; color:blueviolet" class="hero-header">
-        Meet Up
+        Event Planner App
       </h1>
       <p [@fade]="fadeAnimation" style="opacity: 0" class="hero-tag">
         The only fake event planner you'll ever need
@@ -63,7 +63,7 @@
     <div class="col-3">
       <div class="form-group">
         <label for="filter"></label>
-        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)"> 
+        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)">
         <br>
 
       </div>
@@ -72,13 +72,13 @@
   <div class="row justify-content-md-center" *ngFor="let event of events">
       <div class=" col-8 list-group" style="margin-bottom: 10px; margin: 0px 0px 0px 0px">
         <div class=" list-group-item card-event " style="margin-bottom: 5px;">
-          <div class="row"> 
+          <div class="row">
             <div class="col-11">
               <a class="list-group-item list-group-item-action"
               [routerLink]="['/event', event.id]"
               style="border: 0px; padding: 0%;"
               >
-              <span>{{event.date_debut}}</span>
+              <span>{{event.date_debut|date:'medium'}}</span> to <span>{{event.date_fin|date:'medium'}}</span>
                 <!-- <span>{{ setStartDate(event.date_debut) }}</span> -->
                 <h5 class="list-group-item-heading">{{ event.title }}</h5>
                 <p class="list-group-item-text">
@@ -93,24 +93,24 @@
             <div class="col-1 icon-event ">
               <!-- <a href="#" class="btn btn-outline-primary btn-sm" placement="top" ngbTooltip="Add">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <i class="fa fa-plus"></i>            
+                <i class="fa fa-plus"></i>
               </a> -->
-              <a *ngIf="event.isMine" [routerLink]="['event', event.id,'modify']" class="btn btn-outline-info btn-sm" placement="top" ngbTooltip="Edit">
+              <a *ngIf="activedTab==='created' " [routerLink]="['event', event.id,'modify']" class="btn btn-outline-info btn-sm" placement="top" ngbTooltip="Edit">
                   <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                  <i class="fa fa-pencil"></i>           
+                  <i class="fa fa-pencil"></i>
               </a>
               <a [routerLink]="['/event', event.id]" class="btn btn-outline-success btn-sm" placement="top" ngbTooltip="View">
                   <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                  <i class="fa fa-eye"></i>           
+                  <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="event.isMine" (click)="deleteEvent(event.id)" class="btn btn-outline-danger btn-sm" placement="top" ngbTooltip="Delete">
+              <a *ngIf="activedTab==='created'" (click)="deleteEvent(event.id)" class="btn btn-outline-danger btn-sm" placement="top" ngbTooltip="Delete">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  <i class="fa fa-trash"></i>            
+                  <i class="fa fa-trash"></i>
               </a>
-              <a *ngIf="!event.isMine" class="btn btn-outline-success btn-sm" ngbTooltip="Accept">
+              <a *ngIf=" activedTab==='invited'" class="btn btn-outline-success btn-sm" (click)="acceptEvent(event)" ngbTooltip="Accept">
                 <i class="fa fa-check"></i>
               </a>
-              <a *ngIf="!event.isMine" class="btn btn-outline-danger btn-sm" ngbTooltip="Decline">
+              <a *ngIf="activedTab==='invited'" class="btn btn-outline-danger btn-sm" ngbTooltip="Decline">
                 <i class="fa fa-times"></i>
               </a>
             </div>

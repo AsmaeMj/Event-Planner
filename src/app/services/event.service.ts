@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Event } from '../models/event.model';
+import {UserMeeting} from "../models/userMeeting.model";
 import { Typeevents } from '../models/typeEvents.model';
 
 @Injectable({
@@ -126,8 +127,8 @@ export class EventService {
 
 //    this.updateEvents(this.events);
   }
- 
-  
+
+
   addEvent(event: Event): void {
     this.events.push(event);
     //this.updateEvents(this.events);
@@ -147,10 +148,8 @@ export class EventService {
     return this.httpClient.get<Event>("http://localhost:8080/events/"+id);
   }
 
-  deleteEvent(id){
-    this.events.splice(this.events.findIndex(el=>el.id==id), 1);
-    return this.events;
-  
+  deleteEvent(id):Observable<any>{
+    return this.httpClient.delete("http://localhost:8080/deleteevent/"+id);
 }
   getInvitedEvents(username){
     return this.httpClient.get("http://localhost:8080/"+username+"/events/pending");
@@ -180,5 +179,10 @@ export class EventService {
   createNewMeeting(meeting: Event, username: String){
     // let listOfAttendees: Array<User> = meeting.listOfAttendees;
     return this.httpClient.post<Event>(`http://localhost:8080/${username}/events/add`, meeting );
+  }
+  changeMeetingStatus( username:String, userMeeting: UserMeeting){
+    // console.log("Meeting status in the front end is", meeting.status );
+    let url = `http://localhost:8080/${username}/events/change-status`;
+    return this.httpClient.put<Event>( url, userMeeting );
   }
 }
