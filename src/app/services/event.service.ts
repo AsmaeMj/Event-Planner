@@ -172,6 +172,15 @@ export class EventService {
     return this.httpClient.get("http://localhost:8080/events");
   }
 
+  visitNotification(userEventStatus){
+    console.error(userEventStatus);
+    return this.httpClient.put("http://localhost:8080/events/visit", userEventStatus);
+  }
+
+  getSyncNotifications(username){
+    return this.httpClient.get(`http://localhost:8080/${username}/events/visit`);
+  }
+
   gettypeevents() {
     return this.httpClient.get<Typeevents[]>("http://localhost:8080/gettypeevents");
   }

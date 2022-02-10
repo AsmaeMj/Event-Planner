@@ -15,7 +15,7 @@ export class Event {
   file: string;
   userEventStatus: Array<UserMeeting>
   event_dates: any;
-
+  
   // privateEvent: boolean;
   // isMine: boolean;
   

@@ -14,12 +14,14 @@ import { CreateEventComponent } from './components/create-event/create-event.com
 import { EventListComponent } from './components/event-list/event-list.component';
 import { EventDetailComponent } from './components/event-detail/event-detail.component';
 import { EventModifyComponent } from './components/event-modify/event-modify.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpInterceptorService } from './services/http/http-interceptor.service';
+import '@fortawesome/fontawesome-free/js/all.js';
 
 
 const routes: Routes = [
@@ -30,6 +32,7 @@ const routes: Routes = [
 { path: 'login', component: LoginComponent },
 { path: 'create-event', component: CreateEventComponent, canActivate: [ AuthRouteGuardService ] },
 { path: 'event/:id/modify', component: EventModifyComponent },
+{ path: 'profile', component: ProfileComponent },
 ];
 
 
@@ -45,6 +48,7 @@ const routes: Routes = [
     HeaderComponent,
     FooterComponent,
     LoginComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

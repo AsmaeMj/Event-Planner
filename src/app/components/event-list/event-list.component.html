@@ -65,7 +65,6 @@
         <label for="filter"></label>
         <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)">
         <br>
-
       </div>
     </div>
   </div>
@@ -97,26 +96,38 @@
               </a> -->
               <a *ngIf="activedTab==='created' " [routerLink]="['event', event.id,'modify']" class="btn btn-outline-info btn-sm" placement="top" ngbTooltip="Edit">
                   <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                  <i class="fa fa-pencil"></i>
+                  <i class="fas fa-pencil"></i>
               </a>
               <a [routerLink]="['/event', event.id]" class="btn btn-outline-success btn-sm" placement="top" ngbTooltip="View">
                   <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                  <i class="fa fa-eye"></i>
+                  <i class="fas fa-eye"></i>
               </a>
               <a *ngIf="activedTab==='created'" (click)="deleteEvent(event.id)" class="btn btn-outline-danger btn-sm" placement="top" ngbTooltip="Delete">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                  <i class="fa fa-trash"></i>
+                  <i class="fas fa-trash"></i>
               </a>
               <a *ngIf=" activedTab==='invited'" class="btn btn-outline-success btn-sm" (click)="acceptEvent(event)" ngbTooltip="Accept">
-                <i class="fa fa-check"></i>
+                <i class="fas fa-check"></i>
               </a>
               <a *ngIf="activedTab==='invited'" class="btn btn-outline-danger btn-sm" (click)="declineEvent(event)" ngbTooltip="Decline">
-                <i class="fa fa-times"></i>
+                <i class="fas fa-times"></i>
               </a>
             </div>
           </div>
         </div>
-
       </div>
   </div>
 </div>
+<!-- <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" *ngIf="newNotification" class="toast"   role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="fa-regular fa-comment"></i>
+      <strong class="me-auto">&nbsp; New Notification!</strong>
+      <small>1 min ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, You have a new Invitation! <i class="fa-regular fa-face-smile-beam"></i>
+    </div>
+  </div>
+</div> -->

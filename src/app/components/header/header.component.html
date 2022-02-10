@@ -52,9 +52,16 @@
     </ul>
 
     <div class="d-flex">
-      <button *ngIf="authenticationService.isUserLoggedIn()" class="btn btn-dark"><i class="fa fa-bell-o" aria-hidden="true"></i></button>
-      <button *ngIf="authenticationService.isUserLoggedIn()" class="btn btn-outline-light"><i class="fa fa-user-o" aria-hidden="true"> Profile</i></button>
+      <button *ngIf="authenticationService.isUserLoggedIn()"  type="button" style="position: relative; margin-right: 20px;" class="btn btn-dark btn-outline-light ">
+        <i class="fa-regular fa-bell" aria-hidden="true"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          2+
+          <span class="visually-hidden">notifications</span>
+        </span>
+      </button>
+      <button *ngIf="authenticationService.isUserLoggedIn()" class="btn btn-outline-light" (click)="goTo('/profile', $event)"><i class="fa-regular fa-user" > </i></button>
     </div>
   </div>
 </div>
 </nav>
+

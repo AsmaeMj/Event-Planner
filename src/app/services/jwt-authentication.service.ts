@@ -43,7 +43,7 @@ export class JwtAuthenticationService {
   
   isUserLoggedIn(){
     let user = localStorage.getItem(AUTHENTICATED_USER);
-    console.log("user authenticated=",user);
+    //console.log("user authenticated=",user);
     return !(user ===null);
   }
 

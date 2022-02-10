@@ -5,6 +5,9 @@ import { initScrollListener,backToTop } from './shared/resources';
 import { User } from './models/user.model';
 import { UserService } from './services/user.service';
 import { JwtAuthenticationService } from './services/jwt-authentication.service';
+import { scheduleJob } from 'node-schedule';
+import { EventService } from './services/event.service';
+import { NotificationService } from './services/notification.service';
 
 
 @Component({
@@ -26,12 +29,31 @@ import { JwtAuthenticationService } from './services/jwt-authentication.service'
   ]
 })
 export class AppComponent {
-
-  constructor(/*private router: Router,private authenticationService: JwtAuthenticationService, private userService: UserService*/) {}
+  constructor(private eventService: EventService, private authenticationService: JwtAuthenticationService, private notificationService: NotificationService) {}
+  newNotification: boolean=false;
 
   ngOnInit() {
    /* this.getCurrentUser();*/
-    initScrollListener();
+   
+  initScrollListener();
+  scheduleJob("*/2 * * * * *", this.syncEvents.bind(this));
+  }
+
+  syncEvents(){    
+    let username= this.authenticationService.getAuthenticatedUser();
+    this.eventService.getSyncNotifications(username).subscribe(events=>{
+      if((events as Array<Event>).length>0){
+          console.log("New invited event",events);
+          this.newNotification = true;
+          this.notificationService.notifications.next(events);
+      }else{
+        this.newNotification = false;
+      }
+      // this.events=events;
+      return events;
+    }),error=>{
+      console.log(error)
+    };
   }
 /*
   backToTop(){

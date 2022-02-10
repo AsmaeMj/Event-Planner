@@ -30,5 +30,17 @@
       </div>
     </div>
   </div> -->
+
+  <div *ngIf="newNotification" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div   class="alert alert-warning alert-dismissible fade show" role="alert">
+      <div class="alert-header">
+        <i class="fa-regular fa-comment"></i>
+        <strong class="me-auto">&nbsp; New Notification!</strong>
+        <small>1 min ago</small>
+      </div>
+      Hello, You have a new Invitation! <i class="fa-regular fa-face-smile-beam"></i>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
   
 <app-footer></app-footer>

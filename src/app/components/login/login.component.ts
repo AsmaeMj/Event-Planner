@@ -36,4 +36,14 @@ export class LoginComponent implements OnInit {
       }
     )
   }
+
+  showPassword() {
+    let passwordd = (<HTMLInputElement>document.getElementById('pwd'));
+    if (passwordd.type === 'password') {
+      passwordd.type = "text";
+    }
+    else {
+      passwordd.type = "password";
+    }
+    }
 }

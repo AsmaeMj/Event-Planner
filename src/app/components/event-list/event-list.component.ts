@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { result } from 'lodash';
 import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
 import {UserMeeting} from "../../models/userMeeting.model";
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-event-list',
@@ -30,21 +31,24 @@ import {UserMeeting} from "../../models/userMeeting.model";
 })
 
 export class EventListComponent implements OnInit {
-
   currentUser: User;
   events: any;
   titleAnimation: string = 'fadeOutUp';
   fadeAnimation: string = 'fadeOut';
   activedTab:string = "all";
   createdok: any;
-  constructor(private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
+  constructor(private notificationService: NotificationService ,private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+
     this.getUser();
     this.triggerViewAnimation();
     this.getEvents(this.route.snapshot.params['ifOk']);
     console.log(this.activedTab);
-
+    this.notificationService.notifications.subscribe(notifs=>{
+      //  this.newNotification=true;  
+      console.log('notifs');
+    })
   }
 
   getEvents(tab) {
@@ -84,10 +88,24 @@ export class EventListComponent implements OnInit {
     this.eventService.getInvitedEvents(username).subscribe(events=>{
       console.log("invited event",events);
       this.events=events;
+      this.visitEvents(username);
     }),error=>{
       console.log(error)
     };
-    this.activedTab="invited";
+    this.activedTab="invited";    
+  }
+
+  visitEvents(username){
+    this.events.forEach(element => {
+      let usereventlist = element.userEventStatus.filter(e=>(e.user.username===username && !e.showed));
+      console.log(usereventlist);
+      usereventlist.forEach(usereve => {
+        this.eventService.visitNotification(usereve.id).subscribe(result=>{
+          console.log('visit Notif', result); 
+          // this.newNotification=false;
+        });
+      });
+    });
   }
 
   getCreatedEvents(){
@@ -219,8 +237,5 @@ export class EventListComponent implements OnInit {
   declineEvent(event: any) {
     let meetingStatus: number = 4;
     this.updateMeetingStatus( meetingStatus, event );
-
-
-
   }
 }
