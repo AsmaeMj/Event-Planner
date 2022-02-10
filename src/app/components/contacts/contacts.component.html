@@ -1,0 +1,37 @@
+
+<div class="row justify-content-md-center" *ngFor="let contact of this.mycontacts">
+  <div class=" col-8 list-group" style="margin-bottom: 10px; margin: 0px 0px 0px 0px">
+    <div class=" list-group-item card-event " style="margin-bottom: 5px;">
+      <div class="row">
+        <div class="col-11">
+
+          <!-- <span>{{ setStartDate(event.date_debut) }}</span> -->
+          <h5 class="list-group-item-heading">{{ contact.username }}</h5>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <h3>------------------------------add contact--------------</h3>
+<div class="row justify-content-md-center" *ngFor="let user of this.otherusers">
+  <div class=" col-8 list-group" style="margin-bottom: 10px; margin: 0px 0px 0px 0px">
+    <div class=" list-group-item card-event " style="margin-bottom: 5px;">
+      <div class="row">
+        <div class="col-11">
+
+            <!-- <span>{{ setStartDate(event.date_debut) }}</span> -->
+            <h5 class="list-group-item-heading">{{ user.username }}</h5>
+
+
+        </div>
+        <div class="col-1 icon-event ">
+          <a class="btn btn-outline-danger btn-sm" (click)="addcontact(user.username)" ngbTooltip="add">
+            add contact
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -22,7 +22,7 @@ export class CreateAccountComponent implements OnInit {
   bio: AbstractControl;
   invalidRegister: boolean = false;
   invalidRegisterMessage: string = "The username you selected already exisits. Please register with a new username";
-  
+
 
   constructor(fb: FormBuilder, private userService: UserService, private router: Router) {
     this.accountCreateForm = fb.group({
@@ -47,7 +47,7 @@ export class CreateAccountComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null);
+    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null,null,null);
     this.userService.setUser(user).subscribe(
       data => {
         this.handleSuccessfulRegister(data);

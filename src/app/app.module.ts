@@ -22,6 +22,7 @@ import { LoginComponent } from './components/login/login.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpInterceptorService } from './services/http/http-interceptor.service';
 import '@fortawesome/fontawesome-free/js/all.js';
+import { ContactsComponent } from './components/contacts/contacts.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ const routes: Routes = [
 { path: 'create-event', component: CreateEventComponent, canActivate: [ AuthRouteGuardService ] },
 { path: 'event/:id/modify', component: EventModifyComponent },
 { path: 'profile', component: ProfileComponent },
+  { path: 'mycontacts', component: ContactsComponent },
 ];
 
 
@@ -49,6 +51,7 @@ const routes: Routes = [
     FooterComponent,
     LoginComponent,
     ProfileComponent,
+    ContactsComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,7 @@ const routes: Routes = [
     NgbModule,
     NgSelectModule
   ],
-  
+
   providers: [UserService, AuthRouteGuardService, {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })
