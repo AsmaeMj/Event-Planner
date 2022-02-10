@@ -20,6 +20,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpInterceptorService } from './services/http/http-interceptor.service';
+import { ContactsComponent } from './components/contacts/contacts.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
 { path: 'login', component: LoginComponent },
 { path: 'create-event', component: CreateEventComponent, canActivate: [ AuthRouteGuardService ] },
 { path: 'event/:id/modify', component: EventModifyComponent },
+  { path: 'mycontacts', component: ContactsComponent },
 ];
 
 
@@ -45,6 +47,7 @@ const routes: Routes = [
     HeaderComponent,
     FooterComponent,
     LoginComponent,
+    ContactsComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,7 @@ const routes: Routes = [
     NgbModule,
     NgSelectModule
   ],
-  
+
   providers: [UserService, AuthRouteGuardService, {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}],
   bootstrap: [AppComponent]
 })

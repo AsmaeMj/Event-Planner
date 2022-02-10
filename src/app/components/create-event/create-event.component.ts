@@ -35,7 +35,7 @@ export class CreateEventComponent implements OnInit {
    allUsernames;
    search1 = '';
    meetingInvitees: Array<string> = [];
-   allUsers: Array<User> = [];
+   //allUsers: Array<User> = [];
    alltypeevents: Array<Typeevents>=[];
    alltypeeventsname: Array<string>=[];
    selected_type_event_name: string;
@@ -45,6 +45,7 @@ export class CreateEventComponent implements OnInit {
  // events:any;
   dates:FormArray;
   private ismultipledates: Boolean;
+  private mycontacts: Array<User> = [];
 
 
   constructor(
@@ -59,7 +60,7 @@ export class CreateEventComponent implements OnInit {
   ngOnInit() {
     this.meeting = new Event(-1, "", "", "", "","",[],{id:-1,name:""},"",[]);
     //this.getCurrentUser();
-    this.getAllRegisteredUsers();
+    this.getmycontacts();
     this.getAlltypes();
     //this.getEvents();
     this.buildForm();
@@ -91,12 +92,15 @@ export class CreateEventComponent implements OnInit {
     //this.guests.patchValue([]);
   }
 
-  getAllRegisteredUsers(){
-    this.userService.getAllUsers().subscribe(
+  getmycontacts(){
+    this.userService.getUser().subscribe(
       response=>{
         console.log( response );
-        this.allUsers = response;
-        this.allUsernames = this.extractAllUsernamesFromUsers( response );
+        //this.allUsers = response;
+        for(let follow of response.following)  {
+          this.mycontacts.push(follow.to)
+        }
+        this.allUsernames = this.extractAllUsernamesFromUsers( this.mycontacts );
       },
       error=>console.log(error)
     )
@@ -169,7 +173,7 @@ export class CreateEventComponent implements OnInit {
     //attendees. But, this fix is better than not including the meeting organizer in the meeting at all
 
     for( let oneUsername of this.meetingInvitees ){
-      for( let oneUser of this.allUsers ){
+      for( let oneUser of this.mycontacts ){
         if(oneUser.username == oneUsername){
           // res.push( oneUser );
           //let userMeetingKey = new UserMeetingKey( oneUser.id, -1);

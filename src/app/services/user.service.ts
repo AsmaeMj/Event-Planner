@@ -37,5 +37,9 @@ export class UserService {
     return this.authenticationService.isUserLoggedIn();
    //return true;
   }
+  public addcontact(userfrom:string,userto:string){
+    let url = `http://localhost:8080/${userfrom}/${userto}/addcontact`;
+    return this.http.get<any>(url);
+  }
 }
 
