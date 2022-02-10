@@ -8,8 +8,8 @@ export class User {
   verifyPassword: string;
   bio: string;
   userMeetingStatus: any;
-  followers:any;
-  following:any;
+  followers:[];
+  following:[{id:any,from:any,to:any}];
   constructor(firstname, lastname,username, email, password, verifyPassword, bio, userMeetingStatus,followers,following) {
     this.firstname = firstname;
     this.lastname = lastname;
