@@ -20,6 +20,7 @@ export class CreateAccountComponent implements OnInit {
   password: AbstractControl;
   verifyPassword: AbstractControl;
   bio: AbstractControl;
+  avatar:AbstractControl;
   invalidRegister: boolean = false;
   invalidRegisterMessage: string = "The username you selected already exisits. Please register with a new username";
 
@@ -32,7 +33,8 @@ export class CreateAccountComponent implements OnInit {
       'email'           : ['', emailValidator],
       'password'        : ['', [lengthValidator, lowercaseValidator, uppercaseValidator, numberValidator, symbolValidator]],
       'verifyPassword'  : ['', Validators.required],
-      'bio'             : ['']
+      'bio'             : [''],
+      'avatar':['']
     }, { validator: matchPasswords('password', 'verifyPassword') });
 
     this.firstname      = this.accountCreateForm.controls['firstname'];
@@ -42,21 +44,25 @@ export class CreateAccountComponent implements OnInit {
     this.password       = this.accountCreateForm.controls['password'];
     this.verifyPassword = this.accountCreateForm.controls['verifyPassword'];
     this.bio            = this.accountCreateForm.controls['bio'];
+    this.avatar=this.accountCreateForm.controls['avatar'];
   }
 
   ngOnInit() {}
 
   onSubmit() {
-    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null,null,null);
+    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , this.avatar.value,null,null,null);
     this.userService.setUser(user).subscribe(
       data => {
         this.handleSuccessfulRegister(data);
+        this.router.navigate(['profile']);
+
       },
       error => {
         this.handleUnsuccessfulRegister(error);
+        this.router.navigate(['create-account'])
       }
     )
-    this.router.navigate(['/']);
+
   }
 
   handleSuccessfulRegister(data) {

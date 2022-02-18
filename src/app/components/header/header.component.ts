@@ -29,18 +29,19 @@ export class HeaderComponent implements OnInit {
 
 
   getCurrentUser() {
-    if(this.authenticationService.isUserLoggedIn()) {
-    this.userService.getUser().subscribe(user => {
-      this.currentUser = user;
-    },
-    error => {
-      alert(error);
-    });}
-    else{
+    if (this.authenticationService.isUserLoggedIn()) {
+      this.userService.getUser().subscribe(user => {
+          this.currentUser = user;
+        },
+        error => {
+          console.log(error);
+        });
+    } /*else {
       this.router.navigate(["/login"]);
       alert('not logged in')
-    }
+    }*/
   }
+
 
   logOut() {
     this.authenticationService.logout();
@@ -65,4 +66,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  updateprofile() {
+    this.router.navigate(['update-profil']);
+
+  }
 }

@@ -23,6 +23,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpInterceptorService } from './services/http/http-interceptor.service';
 import '@fortawesome/fontawesome-free/js/all.js';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,8 @@ const routes: Routes = [
 { path: 'event/:id/modify', component: EventModifyComponent },
 { path: 'profile', component: ProfileComponent },
   { path: 'mycontacts', component: ContactsComponent },
+  { path: 'update-profil', component: UpdateProfileComponent },
+
 ];
 
 
@@ -52,6 +55,7 @@ const routes: Routes = [
     LoginComponent,
     ProfileComponent,
     ContactsComponent,
+    UpdateProfileComponent,
   ],
   imports: [
     BrowserModule,

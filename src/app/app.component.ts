@@ -34,26 +34,30 @@ export class AppComponent {
 
   ngOnInit() {
    /* this.getCurrentUser();*/
-   
-  initScrollListener();
-  scheduleJob("*/2 * * * * *", this.syncEvents.bind(this));
+
+  //initScrollListener();
+
+  //scheduleJob("*/2 * * * * *", this.syncEvents.bind(this));
+
   }
 
-  syncEvents(){    
-    let username= this.authenticationService.getAuthenticatedUser();
-    this.eventService.getSyncNotifications(username).subscribe(events=>{
-      if((events as Array<Event>).length>0){
-          console.log("New invited event",events);
+  syncEvents(){
+    if(this.authenticationService.isUserLoggedIn()) {
+      let username = this.authenticationService.getAuthenticatedUser();
+      this.eventService.getSyncNotifications(username).subscribe(events => {
+        if ((events as Array<Event>).length > 0) {
+          console.log("New invited event", events);
           this.newNotification = true;
           this.notificationService.notifications.next(events);
-      }else{
-        this.newNotification = false;
-      }
-      // this.events=events;
-      return events;
-    }),error=>{
-      console.log(error)
-    };
+        } else {
+          this.newNotification = false;
+        }
+        // this.events=events;
+        return events;
+      }), error => {
+        console.log(error)
+      };
+    }
   }
 /*
   backToTop(){
