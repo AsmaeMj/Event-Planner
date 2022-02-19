@@ -41,5 +41,10 @@ export class UserService {
     let url = `http://localhost:8080/${userfrom}/${userto}/addcontact`;
     return this.http.get<any>(url);
   }
+
+  public deletecontact(userfrom:string,userto:string){
+    let url = `http://localhost:8080/${userfrom}/${userto}/deletecontact`;
+    return this.http.delete<any>(url);
+  }
 }
 

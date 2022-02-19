@@ -189,7 +189,7 @@ export class EventService {
     // let listOfAttendees: Array<User> = meeting.listOfAttendees;
     return this.httpClient.post<Event>(`http://localhost:8080/${username}/events/add`, meeting );
   }
-  changeMeetingStatus( username:String, userMeeting: UserMeeting){
+  changeMeetingStatus(username:String, userMeeting: UserMeeting){
     // console.log("Meeting status in the front end is", meeting.status );
     let url = `http://localhost:8080/${username}/events/change-status`;
     return this.httpClient.put<Event>( url, userMeeting );

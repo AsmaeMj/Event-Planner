@@ -31,7 +31,7 @@
     </div>
   </div> -->
 
-  <div *ngIf="newNotification" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div *ngIf="newNotification && userloggedin" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
     <div   class="alert alert-warning alert-dismissible fade show" role="alert">
       <div class="alert-header">
         <i class="fa-regular fa-comment"></i>

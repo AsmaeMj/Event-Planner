@@ -11,6 +11,7 @@ import { result } from 'lodash';
 import { JwtAuthenticationService } from 'src/app/services/jwt-authentication.service';
 import {UserMeeting} from "../../models/userMeeting.model";
 import { NotificationService } from 'src/app/services/notification.service';
+import { UserMeetingKey } from 'src/app/models/userMeetingKey.model';
 
 @Component({
   selector: 'app-event-list',
@@ -32,21 +33,26 @@ import { NotificationService } from 'src/app/services/notification.service';
 
 export class EventListComponent implements OnInit {
   currentUser: User;
+  currentUserName: string;
   events: any;
   titleAnimation: string = 'fadeOutUp';
   fadeAnimation: string = 'fadeOut';
   activedTab:string = "all";
   createdok: any;
+  newNotification: boolean=false;
+  isNotAcceptedvar: boolean;
   constructor(private notificationService: NotificationService ,private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-
+    this.currentUserName = this.authenticationService.getAuthenticatedUser();
     this.getUser();
     this.triggerViewAnimation();
-    this.getEvents(this.route.snapshot.params['ifOk']);
-    console.log(this.activedTab);
+    if(this.route.snapshot.params['ifOk']=== undefined) this.getEvents('all');
+    else this.getEvents(this.route.snapshot.params['ifOk']);
+
     this.notificationService.notifications.subscribe(notifs=>{
-      //  this.newNotification=true;  
+      if(notifs!=null) this.newNotification=true;
+      else this.newNotification=false;
       console.log('notifs');
     })
   }
@@ -57,7 +63,23 @@ export class EventListComponent implements OnInit {
       case "all":
         this.eventService.getEventsFromBackEnd().subscribe(result=>{
           this.events=result;
-          console.log(result);
+          this.events.forEach(element => {
+          this.events = this.events.filter(e=>(e.isPublic===true));
+          console.log('first log', this.events);
+          // if(userlist.length!=0){
+          //   console.log(userlist.user.id);
+            
+          //   this.events=this.events.filter(e=>(e.userEventStatus.id==userlist.id));
+          // }
+          // userlist.forEach(usereve => {
+          //   console.log(usereve.id.eventId);
+            
+          //   this.events=this.events.filter(e=>{ console.log('events on the list',e.id);
+          //   return (e.id==usereve.id.eventId)});
+          // });
+          })
+          
+
         })
         this.activedTab="all";
         break;
@@ -92,7 +114,8 @@ export class EventListComponent implements OnInit {
     }),error=>{
       console.log(error)
     };
-    this.activedTab="invited";    
+    this.activedTab="invited";
+    this.newNotification=false;  
   }
 
   visitEvents(username){
@@ -206,7 +229,7 @@ export class EventListComponent implements OnInit {
 
   getUserMeetingStatusToUpdate( userMeetingList: Array<UserMeeting>, username: string ){
     for( let oneUserMeeting of userMeetingList ){
-      if( oneUserMeeting.user.username == username )
+      if( oneUserMeeting.user.username === username )
         return oneUserMeeting;
     }
 
@@ -216,6 +239,13 @@ export class EventListComponent implements OnInit {
     let username= this.authenticationService.getAuthenticatedUser();
 
     let userMeetingStatusToUpdate = this.getUserMeetingStatusToUpdate( event.userEventStatus, username );
+    if(userMeetingStatusToUpdate==null){
+      let UserMeetingId = new UserMeetingKey(this.currentUser.id,event.id);
+      userMeetingStatusToUpdate = new UserMeeting(UserMeetingId,this.currentUser,null);
+      console.log('to update',userMeetingStatusToUpdate);
+
+    }
+    
     userMeetingStatusToUpdate.statut = meetingStatus;
 
     this.eventService.changeMeetingStatus( username, userMeetingStatusToUpdate ).subscribe(
@@ -232,10 +262,37 @@ export class EventListComponent implements OnInit {
     let meetingStatus: number = 3;
     // let meetingStatus: number = STATUS_ACCEPTED;
     this.updateMeetingStatus( meetingStatus, event );
+    this.activedTab = "accepted";
+    this.router.navigate([`/event-list/${this.activedTab}`]);
+    
+
+  }
+
+  acceptPublicEvent(event: any) {
+    let meetingStatus: number = 3;
+    // let meetingStatus: number = STATUS_ACCEPTED;
+    this.updateMeetingStatus( meetingStatus, event );
+    this.activedTab = "accepted";
+    this.router.navigate([`/event-list/${this.activedTab}`]);
+    this.getEvents(this.activedTab);
   }
 
   declineEvent(event: any) {
     let meetingStatus: number = 4;
     this.updateMeetingStatus( meetingStatus, event );
+  }
+
+  isNotAccepted(event: Event){
+    let username = this.authenticationService.getAuthenticatedUser();
+    let userlist = event.userEventStatus.filter(e=>(e.user.username===username && (e.statut==3 || e.statut==1 )));
+    
+    console.log('list events not accepted',userlist);
+    if(userlist.length != 0){
+      this.isNotAcceptedvar = false;
+      return false;
+    }  else {
+      this.isNotAcceptedvar = true;
+      return true;
+    }
   }
 }

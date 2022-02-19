@@ -23,10 +23,9 @@ export class EventDetailComponent implements OnInit {
       console.log(this.event);
       this.mapImage = 'https://maps.googleapis.com/maps/api/staticmap?center=' + encodeURIComponent(this.event.adresse) + '&scale=2&zoom=14&size=640x640&maptype=roadmap&key=AIzaSyC5-1er5cL2OCpfYLu7rVzt_bmRJHb9Uck';
       this.mapLink = 'https://maps.google.com/?q='+ encodeURIComponent(this.event.adresse);
+   
     })
     
-
-    //console.error(this.event.adresse);
     
   }
 

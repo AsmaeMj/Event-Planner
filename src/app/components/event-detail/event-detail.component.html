@@ -32,6 +32,7 @@
         <span >Date: From {{dates.start | date: 'medium'}} </span>
         <span >To {{dates.end | date: 'medium'}} </span>
       </p>
+      <app-event-vote *ngIf="event.date_debut==undefined && event.date_fin==undefined"></app-event-vote>
       <!--<pre>{{event | json}}</pre>-->
     </div>
   </div>

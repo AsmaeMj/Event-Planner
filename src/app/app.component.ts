@@ -31,30 +31,35 @@ import { NotificationService } from './services/notification.service';
 export class AppComponent {
   constructor(private eventService: EventService, private authenticationService: JwtAuthenticationService, private notificationService: NotificationService) {}
   newNotification: boolean=false;
-
+  userloggedin: boolean= this.authenticationService.isUserLoggedIn();
   ngOnInit() {
    /* this.getCurrentUser();*/
    
   initScrollListener();
   scheduleJob("*/2 * * * * *", this.syncEvents.bind(this));
+  
+  
   }
 
-  syncEvents(){    
-    let username= this.authenticationService.getAuthenticatedUser();
-    this.eventService.getSyncNotifications(username).subscribe(events=>{
-      if((events as Array<Event>).length>0){
-          console.log("New invited event",events);
-          this.newNotification = true;
-          this.notificationService.notifications.next(events);
-      }else{
-        this.newNotification = false;
-      }
-      // this.events=events;
-      return events;
-    }),error=>{
-      console.log(error)
-    };
-  }
+  syncEvents(){
+    this.userloggedin=this.authenticationService.isUserLoggedIn();
+    if(this.userloggedin){
+
+      let username= this.authenticationService.getAuthenticatedUser();
+      this.eventService.getSyncNotifications(username).subscribe(events=>{
+        if((events as Array<Event>).length>0){
+            console.log("New invited event",events);
+            this.newNotification = true;
+            this.notificationService.notifications.next(events);
+        }else{
+          this.newNotification = false;
+        }
+        // this.events=events;
+        return events;
+      }),error=>{
+        console.log(error)
+      };
+  }}
 /*
   backToTop(){
     backToTop();

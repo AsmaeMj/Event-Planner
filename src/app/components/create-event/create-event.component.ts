@@ -31,6 +31,7 @@ export class CreateEventComponent implements OnInit {
   //  guestsTouched: boolean = false; // Workaround to create <tag-input> component validation...
   // currentUser: User;
 
+  isPublic: boolean;
    meeting: Event;
    allUsernames;
    search1 = '';
@@ -58,7 +59,7 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.meeting = new Event(-1, "", "", "", "","",[],{id:-1,name:""},"",[]);
+    this.meeting = new Event(-1,true, "", "", "", "","",[],{id:-1,name:""},"",[]);
     //this.getCurrentUser();
     this.getmycontacts();
     this.getAlltypes();
@@ -143,6 +144,7 @@ export class CreateEventComponent implements OnInit {
     else
       this.meeting.event_dates=[];
 
+    this.meeting.isPublic = this.isPublic;
     this.meeting.title = this.name.value;
     this.selected_type_event_name = this.eventType.value;
     //si on a selectionne le choix one date
@@ -188,11 +190,18 @@ export class CreateEventComponent implements OnInit {
   }
 
   handleSuccessfulResponse(response){
-    console.log("Successfully saved the meeting");
+    alert("Successfully saved the meeting");
     console.log( response );
     //[ngClass]="{'active-tab':activedTab==='created'}" (click)="goTo('/event-list', $event)"
     this.ifOk="created";
     this.router.navigate([`/event-list/${this.ifOk}`]);
+  }
+
+  onItemChange(value){
+    console.log('ispublic:', value);
+    this.isPublic = value;
+    console.log('22',this.isPublic);
+    
   }
 
   selectedStatic(result) {

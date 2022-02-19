@@ -47,7 +47,7 @@ export class CreateAccountComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
-    let user = new User(this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null,null,null);
+    let user = new User(-1,this.firstname.value, this.lastname.value, this.username.value, this.email.value, this.password.value, this.verifyPassword.value, this.bio.value , null,null,null);
     this.userService.setUser(user).subscribe(
       data => {
         this.handleSuccessfulRegister(data);

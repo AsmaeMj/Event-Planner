@@ -23,6 +23,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpInterceptorService } from './services/http/http-interceptor.service';
 import '@fortawesome/fontawesome-free/js/all.js';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { EventVoteComponent } from './components/event-vote/event-vote.component';
 
 
 const routes: Routes = [
@@ -52,6 +54,7 @@ const routes: Routes = [
     LoginComponent,
     ProfileComponent,
     ContactsComponent,
+    EventVoteComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +65,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     NgbModule,
-    NgSelectModule
+    NgSelectModule,
+    Ng2SearchPipeModule
   ],
 
   providers: [UserService, AuthRouteGuardService, {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}],

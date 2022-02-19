@@ -1,5 +1,5 @@
 export class User {
-
+  id: number;
   firstname: string;
   lastname: string;
   username: string;
@@ -10,7 +10,8 @@ export class User {
   userMeetingStatus: any;
   followers:[];
   following:[{id:any,from:any,to:any}];
-  constructor(firstname, lastname,username, email, password, verifyPassword, bio, userMeetingStatus,followers,following) {
+  constructor(id,firstname, lastname,username, email, password, verifyPassword, bio, userMeetingStatus,followers,following) {
+    this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.username = username;

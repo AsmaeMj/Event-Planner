@@ -6,6 +6,7 @@ import { UserMeeting } from './userMeeting.model';
 export class Event {
 
   id: number;
+  isPublic: boolean;
   title: string;
   adresse: any;
   description: string;
@@ -20,8 +21,9 @@ export class Event {
   // isMine: boolean;
   
 
-  constructor(id, title, adresse, description, date_debut, date_fin,event_dates, typeEvent, file, userEventStatus) {
+  constructor(id,isPublic, title, adresse, description, date_debut, date_fin,event_dates, typeEvent, file, userEventStatus) {
     this.id = id;
+    this.isPublic=isPublic;
     this.title = title;
     this.typeEvent = typeEvent;
     this.adresse = adresse;

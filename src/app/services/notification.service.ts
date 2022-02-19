@@ -10,6 +10,9 @@ export class NotificationService {
 
 
   constructor() { }
-  
+  isthereanynotifs(){
+    console.error('wana see what is inside notif',this.notifications._value);
+    return this.notifications._value;
+  }
 
 }
