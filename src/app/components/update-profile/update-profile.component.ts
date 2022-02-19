@@ -72,6 +72,7 @@ export class UpdateProfileComponent implements OnInit {
       }, false);
 
       reader.readAsDataURL(image);
+      console.log("redear url:",reader)
     } else {
       this.showSpinner = false;
     }

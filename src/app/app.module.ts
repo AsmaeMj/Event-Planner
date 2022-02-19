@@ -27,7 +27,6 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { EventVoteComponent } from './components/event-vote/event-vote.component';
 import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 
-
 const routes: Routes = [
 { path: '', component: EventListComponent },
 { path: 'event-list/:ifOk', component: EventListComponent },

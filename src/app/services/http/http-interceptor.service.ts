@@ -36,10 +36,9 @@ export class HttpInterceptorService implements HttpInterceptor {
             console.log('this is client side error');
             errorMsg = `Error: ${error.error.message}`;
           }
-          else {
+          else if(error.status==401) {
             console.log('this is server side error');
             errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
-
               this.authService.logout();
 
           }

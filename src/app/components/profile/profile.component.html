@@ -15,7 +15,7 @@
                         <div class="col-sm-6 col-12 text-sm-end">
                             <div class="mx-n1"> <a class="btn d-inline-flex btn-sm btn-neutral border-base mx-1"> <span class=" pe-2"> <i class="bi bi-pencil"></i> </span> <span>Edit contact list</span> </a> <a class="btn d-inline-flex btn-sm btn-primary mx-1"  data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"> <span class=" pe-2"> <i class="bi bi-plus"></i> </span> <span>Add New Contact</span> </a> </div>
                         <br>
-                                                 
+
                         </div>
                     </div> <!-- Nav -->
                     <!-- <ul class="nav nav-tabs mt-4 overflow-x border-0">
@@ -102,21 +102,21 @@
                             <tbody>
                                 <!-- <tr class="collapse" id="collapseExample" >
                                     <td>
-                                    <select id="guests" 
-                                    placeholder="Add a guest" 
+                                    <select id="guests"
+                                    placeholder="Add a guest"
                                     (change)="update($event)"
                                     required>
                                     <option value="">--Please choose an option--</option>
                                     <option *ngFor="let user of this.otherusers" [value]="user.username">{{ user.username }}</option>
                                     </select></td>
                                     <td>
-                                    <a  class="btn btn-outline-danger btn-sm"  (click)="addcontact()" ngbTooltip="add">Add <i class="bi bi-plus"></i></a> 
+                                    <a  class="btn btn-outline-danger btn-sm"  (click)="addcontact()" ngbTooltip="add">Add <i class="bi bi-plus"></i></a>
                                   </td>
                                 </tr> -->
                                 <td  class="text-muted text-sm card-footer border-0 py-5" *ngIf="otherusers == undefined || otherusers.length == 0" >You already have everyone on your list!</td>
                                 <tr > <i class="fa-solid fa-magnifying-glass"></i> <input type="text" [(ngModel)]="term"  class="text-muted text-sm searchTerm" placeholder="Who are you looking for?" ngbTooltip="search by username firstname lastname or email"></tr>
                                 <tr *ngFor="let user of otherusers | filter:term">
-                                    <td> <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2"> <a class="text-heading font-semibold" href="#"> {{ user.username }} </a> </td>
+                                    <td> <img alt="..." [src]="avatars[user.username]" class="avatar avatar-sm rounded-circle me-2"> <a class="text-heading font-semibold" href="#"> {{ user.username }} </a> </td>
                                     <td> {{ user.firstname }} </td>
                                     <td> {{ user.lastname }} </td>
                                     <td> {{ user.email }} </td>
@@ -146,7 +146,7 @@
                             <tbody>
                                 <td  class="text-muted text-sm card-footer border-0 py-5" *ngIf="mycontacts == undefined || mycontacts.length == 0" >You don't have any contacts yet</td>
                                 <tr *ngFor="let contact of mycontacts; let i = index;">
-                                    <td> <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2"> <a class="text-heading font-semibold" href="#"> {{ contact.username }} </a> </td>
+                                    <td> <img alt="..." [src]="avatars[contact.username]" class="avatar avatar-sm rounded-circle me-2"> <a class="text-heading font-semibold" href="#"> {{ contact.username }} </a> </td>
                                     <td> {{ contact.firstname }} </td>
                                     <td> {{ contact.lastname }} </td>
                                     <td> {{ contact.email }} </td>

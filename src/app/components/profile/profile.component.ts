@@ -13,19 +13,19 @@ export class ProfileComponent implements OnInit {
   public mycontacts: Array<User> = [];
   public allusers:Array<User> = [];
   public otherusers: Array<User> = [];
+  public avatars:{[key: string]: any}={}
   selected;
   searchTerm: string;
   term: string;
 
   constructor(
-    private userService: UserService, 
+    private userService: UserService,
     private router: Router,
     private authenticationService: JwtAuthenticationService,
   ) { }
 
   ngOnInit(): void {
     this.getmycontacts();
-    console.log(this.allusers);
   }
 
   update(e){
@@ -41,7 +41,6 @@ export class ProfileComponent implements OnInit {
           this.mycontacts.push(follow.to)
         }
         this.getallusers();
-
       },
       error=>console.log(error)
     )
@@ -52,13 +51,17 @@ export class ProfileComponent implements OnInit {
       response=>{
         console.log( response );
         //this.allUsers = response;
-        for(let user of response)  {
+        for(let user of response) {
           this.allusers.push(user)
+          console.log( "user=",user );
+
         }
         this.allusers = this.allusers.filter(user => user.username != this.authenticationService.getAuthenticatedUser());
         this.otherusers= this.allusers.filter(el=>
           this.mycontacts.every((f) => f.username !==el.username)
         );
+        this.getallavatars();
+
       },
       error=>console.log(error)
 
@@ -67,7 +70,7 @@ export class ProfileComponent implements OnInit {
 
   addcontact(username) {
     console.log("usernameeee" ,username);
-    
+
     this.userService.addcontact(this.authenticationService.getAuthenticatedUser(),username).subscribe(
       response=>{
         console.log( response );
@@ -76,7 +79,7 @@ export class ProfileComponent implements OnInit {
       error=>console.log(error)
 
     )
-    
+
   }
 
   deletecontact(username){
@@ -90,6 +93,28 @@ export class ProfileComponent implements OnInit {
     )
     window.location.reload();
 
+
+
   }
 
+  private getallavatars() {
+      //console.log("jai entre a get all avatars this.allusers=",this.allusers)
+    //je stock chaque image d avatar dans le tableau
+    console.log("j ai entre",this.allusers)
+    this.allusers.forEach(user=> {
+        this.userService.getimage(user.username).subscribe(
+          image => {
+              let reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+              this.avatars[user.username] = reader.result;
+            }, false);
+
+            reader.readAsDataURL(image);
+            console.log("redear url:",reader)
+
+             });
+      }
+    )
+  }
 }
