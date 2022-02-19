@@ -201,7 +201,7 @@ export class CreateEventComponent implements OnInit {
     console.log('ispublic:', value);
     this.isPublic = value;
     console.log('22',this.isPublic);
-    
+
   }
 
   selectedStatic(result) {
@@ -221,7 +221,6 @@ export class CreateEventComponent implements OnInit {
   geolocate() {
     this.googleMaps.geolocate();
   }
-
 
   updateLocationValue() {
     let locationValue = (<HTMLInputElement>document.getElementById('location')).value;

@@ -1,1 +1,140 @@
-<p>event-modify works!</p>
+
+<div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 600px;">
+  <div class="card-header">Schedule Meeting</div>
+  <div class="card-body">
+    <form class="row g-3" autocomplete="on" [formGroup]="createEventForm" novalidate>
+      <div class="card-block">
+        <div>
+          <div class="form-group">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <label class="form-check-label" for="inlineRadio1">Private Event</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">Public Event</label>
+            </div>
+          </div>
+          <div class="form-group" [class.has-warning]="!name.valid && name.touched" [class.has-success]="name.valid && name.touched">
+            <label class="col-form-label" for="name">Event name</label>
+            <input [ngModel]="this.meeting.title" [formControl]="createEventForm.controls['name']" [class.form-control-warning]="!name.valid && name.touched" [class.form-control-success]="name.valid" type="name" class="form-control" name="name" id="name" required myAutofocus>
+            <div [hidden]="name.valid || !name.touched" style="color: red; font-size: small;" class="form-control-feedback">An event name is required.</div>
+            <!-- <div [hidden]="name.valid || !name.touched"  class="form-control-feedback" class="alert alert-primary" role="alert">
+              An event name is required.
+            </div> -->
+          </div>
+          <div class="form-group" [class.has-warning]="!eventType.valid && eventType.touched" [class.has-success]="eventType.valid && eventType.touched">
+            <label for="eventType">Select an event type</label>
+            <ng-select
+              [formControl]="createEventForm.controls['eventType']" [class.form-control-warning]="!eventType.valid && eventType.touched"
+              [class.form-control-success]="eventType.valid" id="eventType"
+              [items]="alltypeeventsname"
+              placeholder="Event Type"
+              appendTo="body"
+              searchable="true"
+              name="type_event"
+
+              [(ngModel)]="selected_type_event_name">
+            </ng-select>
+            <div [hidden]="eventType.valid || !eventType.touched"  class="form-control-feedback" style="color: red; font-size: small;">An event type is required.</div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="DatesRadioOptions" id="DatesRadio1" value="One Date" (click)="setRadio('One Date')" [checked]="true" >
+              <label class="form-check-label" for="DatesRadio1">One Date</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="DatesRadioOptions" id="DatesRadio2" (click)="setRadio('Multiple dates')" value="Multiple dates">
+              <label class="form-check-label" for="inlineRadio2">Multiple dates</label>
+            </div>
+          </div>
+
+          <div *ngIf="isSelected('One Date')" class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group" [class.has-warning]="!start.valid && start.touched" [class.has-success]="start.valid && start.touched">
+                <label class="col-form-label" for="start">Start time</label>
+                <input [ngModel]="meeting.date_debut" [formControl]="createEventForm.controls['start']" [class.form-control-warning]="!start.valid && start.touched" [class.form-control-success]="start.valid" (change)="updateEndTime()" type="datetime-local" class="form-control" name="start" id="start" required>
+                <div [hidden]="start.valid || !start.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid start time is required.</div>
+                <div [hidden]="!start.hasError('invalidDate') || !start.touched" style="color: red; font-size: small;" class="form-control-feedback">Start time can't be in the past.</div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-group" [class.has-warning]="createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || !end.valid && end.touched" [class.has-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.touched || end.valid && end.touched">
+                <label class="col-form-label" for="end">End time</label>
+                <input [ngModel]="meeting.date_fin"  [formControl]="createEventForm.controls['end']" [class.form-control-warning]="createEventForm.hasError('endDateIsBeforeStartDate') || !end.valid && end.touched" [class.form-control-success]="!createEventForm.hasError('endDateIsBeforeStartDate') && end.valid" type="datetime-local" class="form-control" name="end" id="end" required>
+                <div [hidden]="end.valid || !end.touched || start.hasError('invalidDate')" style="color: red; font-size: small;" class="form-control-feedback">A valid end time is required.</div>
+                <div [hidden]="!end.hasError('invalidDate') || !end.touched" style="color: red; font-size: small;" class="form-control-feedback">End time cannot be in the past.</div>
+                <div [hidden]="!createEventForm.hasError('endDateIsBeforeStartDate') || !end.touched"style="color: red; font-size: small;" class="form-control-feedback">End time must be greater than start time.</div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="isSelected('Multiple dates')">
+            <button (click)="addProposedDate()"><i class="fa fa-plus"></i></button>
+            <div  formArrayName="dates" *ngFor="let item of createEventForm.get('dates')['controls']; let i = index;" >
+              <div [formGroupName]="i" class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <div class="form-group">
+                    <label class="col-form-label" for="start{{i}}">Start date {{i+1}}</label>
+                    <input formControlName="start" type="datetime-local" class="form-control" placeholder="start date {{i+1}}" name="start{{i}}" type="datetime-local"  name="start" id="start" >
+
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <div class="form-group" >
+                    <label class="col-form-label"for="end{{i}}">End date {{i+1}}</label>
+                    <input formControlName="end" type="datetime-local" class="form-control"  placeholder="end date {{i+1}}" name="end{{i}}"  type="datetime-local"  name="end" id="end" >
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="form-group" [class.has-warning]="!location.valid && location.touched" [class.has-success]="location.valid && location.touched">
+            <label class="col-form-label" for="location">Location</label>
+            <input [ngModel]="meeting.adresse" [formControl]="createEventForm.controls['location']" [class.form-control-warning]="!location.valid && location.touched" [class.form-control-success]="location.valid" class="form-control" id="location" placeholder="Enter an address" (focus)="geolocate()" (blur)="updateLocationValue()" type="text" required>
+            <div [hidden]="location.valid || !location.touched" style="color: red; font-size: small;" class="form-control-feedback">A location is required.</div>
+          </div>
+
+          <div class="form-group" [class.has-warning]="!guests.valid && guests.touched" [class.has-success]="guests.valid && guests.touched">
+            <label for="guests">Guest list</label>
+            <ng-select [formControl]="createEventForm.controls['guests']" [class.form-control-warning]="!guests.valid && guests.touched"
+                       [class.form-control-success]="guests.valid" id="guests"
+                       [multiple]="true"
+                       [items]="allUsernames"
+                       placeholder="Add a guest"
+                       secondaryPlaceholder="Hit enter to add name"
+                       [(ngModel)]="meetingInvitees"
+                       required></ng-select>
+
+            <div [hidden]="guests.valid || !guests.touched" style="color: red; font-size: small;" class="form-control-feedback">Guests are required to create events.</div>
+            <small class="form-text text-muted">To add multiple guests, type a name and hit the enter key.</small>
+          </div>
+          <div class="form-group">
+            <label for="message">Message <small class="text-muted">(optional)</small></label>
+            <textarea [ngModel]="meeting.description" [formControl]="createEventForm.controls['message']" name="message" class="form-control" id="message" rows="3"></textarea>
+            <small class="form-text text-muted">Would you like to give more information to your guests?</small>
+          </div>
+          <!-- <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck">
+              <label class="form-check-label" for="gridCheck">
+                Private Event
+              </label>
+            </div>
+          </div> -->
+          <div class="d-grid gap-2">
+            <!-- [disabled]="!createEventForm.valid -->
+            <button type="submit" [disabled]="!createEventForm.valid" class="btn btn-primary" (click)="updateMeeting() ">Modify</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="text-center" style="color: chocolate; font-size: small;">
+      All meeting participants will be sent an invite and you will be notified of their status.
+    </div>
+  </div>
+</div>

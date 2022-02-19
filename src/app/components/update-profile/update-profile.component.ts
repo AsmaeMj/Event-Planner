@@ -19,7 +19,7 @@ export class UpdateProfileComponent implements OnInit {
    imageToShow: any=null;
 
   constructor(private httpClient: HttpClient,private authenticationService : JwtAuthenticationService,private userservice : UserService) {
-    this.user=new User(null,null,null,null,null,null,null,null,null,null,null);
+    this.user=new User(null,null,null,null,null,null,null,null,null,null,null,null);
 
   }
 
@@ -72,6 +72,7 @@ export class UpdateProfileComponent implements OnInit {
       }, false);
 
       reader.readAsDataURL(image);
+      console.log("redear url:",reader)
     } else {
       this.showSpinner = false;
     }
