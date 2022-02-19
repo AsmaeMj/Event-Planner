@@ -93,6 +93,8 @@ export class ProfileComponent implements OnInit {
     )
     window.location.reload();
 
+
+
   }
 
   private getallavatars() {
