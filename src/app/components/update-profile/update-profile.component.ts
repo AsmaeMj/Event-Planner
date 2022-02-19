@@ -19,7 +19,7 @@ export class UpdateProfileComponent implements OnInit {
    imageToShow: any=null;
 
   constructor(private httpClient: HttpClient,private authenticationService : JwtAuthenticationService,private userservice : UserService) {
-    this.user=new User(null,null,null,null,null,null,null,null,null,null,null);
+    this.user=new User(-1,null,null,null,null,null,null,null,null,null,null,null);
 
   }
 
