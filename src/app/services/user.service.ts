@@ -15,7 +15,7 @@ export class UserService {
 
   constructor( private http: HttpClient , private authenticationService: JwtAuthenticationService) {}
 
-  public getUser(){
+  public getUser():Observable<User>{
     let username=this.authenticationService.getAuthenticatedUser();
     return this.http.get<User>("http://localhost:8080/user/"+username);
   }
@@ -23,8 +23,8 @@ export class UserService {
   public setUser(user: any): Observable<User> {
     this.user = user;
     this.currentUser.next(user);
-    let url = `${this.API_URL}/users`;
-    return this.http.post<User>(url, user)
+    //let url = `${this.API_URL}/users`;
+    return this.http.post<User>("http://localhost:8080/users", user)
   }
 
   getAllUsers(){
@@ -44,7 +44,19 @@ export class UserService {
 
   public deletecontact(userfrom:string,userto:string){
     let url = `http://localhost:8080/${userfrom}/${userto}/deletecontact`;
-    return this.http.delete<any>(url);
+    return this.http.delete<any>(url);}
+    
+  public getimage(username:String){
+    return this.http.get(`http://localhost:8080/${username}/image/get/`, { responseType: 'blob' } )
+
+  }
+
+
+  updateUser(user: User) {
+    let url = `http://localhost:8080/user/update`;
+    return this.http.put<User>(url,user);
+
+
   }
 }
 

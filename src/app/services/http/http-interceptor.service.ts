@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpEvent} from '@angular/common/http';
 import { JwtAuthenticationService } from '../jwt-authentication.service';
-
+import {Observable, throwError} from "rxjs";
+import {catchError, map} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class HttpInterceptorService implements HttpInterceptor {
-  
+
   constructor(
     private authService: JwtAuthenticationService
   ) { }
@@ -14,7 +15,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   // The parameter request is the HttpRequest being sent out
   // In the method below, we will intercept the request, add header
   // and forward the request to next http handler
-  intercept(request: HttpRequest<any>, next: HttpHandler){
+  intercept(request: HttpRequest<any>, next: HttpHandler):Observable<HttpEvent<any>>{
 
     let authHeaderString = this.authService.getAuthenticateToken();
     let username = this.authService.getAuthenticatedUser();
@@ -27,6 +28,24 @@ export class HttpInterceptorService implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          let errorMsg = '';
+          if (error.error instanceof ErrorEvent) {
+            console.log('this is client side error');
+            errorMsg = `Error: ${error.error.message}`;
+          }
+          else {
+            console.log('this is server side error');
+            errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
+
+              this.authService.logout();
+
+          }
+          console.log(errorMsg);
+          return throwError(errorMsg);
+        })
+      )
   }
 }

@@ -25,6 +25,7 @@ import '@fortawesome/fontawesome-free/js/all.js';
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { EventVoteComponent } from './components/event-vote/event-vote.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,8 @@ const routes: Routes = [
 { path: 'event/:id/modify', component: EventModifyComponent },
 { path: 'profile', component: ProfileComponent },
   { path: 'mycontacts', component: ContactsComponent },
+  { path: 'update-profil', component: UpdateProfileComponent },
+
 ];
 
 
@@ -55,6 +58,7 @@ const routes: Routes = [
     ProfileComponent,
     ContactsComponent,
     EventVoteComponent,
+    UpdateProfileComponent,
   ],
   imports: [
     BrowserModule,
