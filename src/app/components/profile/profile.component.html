@@ -116,7 +116,7 @@
                                 <td  class="text-muted text-sm card-footer border-0 py-5" *ngIf="otherusers == undefined || otherusers.length == 0" >You already have everyone on your list!</td>
                                 <tr > <i class="fa-solid fa-magnifying-glass"></i> <input type="text" [(ngModel)]="term"  class="text-muted text-sm searchTerm" placeholder="Who are you looking for?" ngbTooltip="search by username firstname lastname or email"></tr>
                                 <tr *ngFor="let user of otherusers | filter:term">
-                                    <td> <img alt="..." [src]="avatars[user.username]" class="avatar avatar-sm rounded-circle me-2"> <a class="text-heading font-semibold" href="#"> {{ user.username }} </a> </td>
+                                    <td> <img alt="..." [src]="avatars[user.username]" class="avatar avatar-sm rounded-circle me-2"><a class="text-heading font-semibold" href="#"> {{ user.username }} </a> </td>
                                     <td> {{ user.firstname }} </td>
                                     <td> {{ user.lastname }} </td>
                                     <td> {{ user.email }} </td>

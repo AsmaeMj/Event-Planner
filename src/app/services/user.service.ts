@@ -48,7 +48,6 @@ export class UserService {
     
   public getimage(username:String){
     return this.http.get(`http://localhost:8080/${username}/image/get/`, { responseType: 'blob' } )
-
   }
 
 

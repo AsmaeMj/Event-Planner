@@ -1,1 +1,49 @@
-<p>event-vote works!</p>
+<div class="container mt-5 px-2"  *ngIf="!(host===currentUser)">
+    <!-- <div class="mb-2 d-flex justify-content-between align-items-center">
+        <div class="px-2"> <span >Filters <i class="fa fa-angle-down"></i></span> <i class="fa fa-ellipsis-h ms-3"></i> </div>
+    </div> -->
+    <div class="table-responsive" *ngIf="event">
+        invited
+        <table class="table table-responsive table-borderless">
+            <thead>
+                <tr class="bg-light">
+                    <th scope="col" width="5%">select a date</th>
+                    <th scope="col" width="20%">Start Date</th>
+                    <th scope="col" width="20%">End Date</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let dates of event.event_dates; let i=index" >
+                    <th scope="row"><input class="form-check-input" type="radio"  value="index" [checked]="isVoted(dates)" name="dateRadio" id="dateRadio{{i+1}}" (click)="voteevent(dates)"></th>
+                    <td>{{dates.start | date: 'medium'}}</td>
+                    <td>{{dates.end | date: 'medium'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container mt-5 px-2"  *ngIf="host===currentUser">
+    <!-- <div class="mb-2 d-flex justify-content-between align-items-center">
+        <div class="px-2"> <span >Filters <i class="fa fa-angle-down"></i></span> <i class="fa fa-ellipsis-h ms-3"></i> </div>
+    </div> -->
+    <div class="table-responsive">
+        creator
+        <table class="table table-responsive table-borderless">
+            <thead>
+                <tr class="bg-light">
+                    <th scope="col" width="20%">No. Votes</th>
+                    <th scope="col" width="20%">Start Date</th>
+                    <th scope="col" width="20%">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dates of event.event_dates; let i=index" >
+                    <td>{{dates.votes.length}}</td>
+                    <td>{{dates.start | date: 'medium'}}</td>
+                    <td>{{dates.end | date: 'medium'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

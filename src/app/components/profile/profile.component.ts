@@ -102,16 +102,25 @@ export class ProfileComponent implements OnInit {
     //je stock chaque image d avatar dans le tableau
     console.log("j ai entre",this.allusers)
     this.allusers.forEach(user=> {
+      console.log(user);
         this.userService.getimage(user.username).subscribe(
-          image => {
-              let reader = new FileReader();
+          response => {
+              if(response !=null){
+                let reader = new FileReader();
 
-            reader.addEventListener("load", () => {
-              this.avatars[user.username] = reader.result;
-            }, false);
+                reader.addEventListener("load", () => {
+                  this.avatars[user.username] = reader.result;
+                }, false);
+                reader.addEventListener("error",(error)=>{
+                  console.log("ERROR READER"+error);
+                })
 
-            reader.readAsDataURL(image);
-            console.log("redear url:",reader)
+                reader.readAsDataURL(response);
+                console.log("redear url:",reader)
+              }
+              else{
+                this.avatars[user.username] = "../../../assets/profile.jpg";
+              }
 
              });
       }

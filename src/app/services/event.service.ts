@@ -194,4 +194,15 @@ export class EventService {
     let url = `http://localhost:8080/${username}/events/change-status`;
     return this.httpClient.put<Event>( url, userMeeting );
   }
+
+  votedateevent(event_id,username,datevote){
+    let url = `http://localhost:8080/events/${event_id}/${username}/votedate`;
+    return this.httpClient.put<Event>( url, datevote);
+  }
+
+  getdatevoted(event_id,username){    
+    let url = `http://localhost:8080/events/${event_id}/${username}/datevoted`;    
+    return this.httpClient.get<any>(url);
+
+  }
 }

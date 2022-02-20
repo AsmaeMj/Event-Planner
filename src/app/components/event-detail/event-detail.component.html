@@ -5,10 +5,10 @@
       <button class="event-directions-fab" ngbTooltip="Google Maps" placement="top" (click)="viewDirections(mapLink)">
         <i class="fa fa-map fa-2x" aria-hidden="true"></i><span class="sr-only">View location on Google Maps</span>
       </button>
-    <div class="card-block">
+    <div class="card-block" *ngIf="event">
       <h2 class="card-title">{{event.title}} <span class="event-type-tag"> {{event.typeEvent.name}} </span></h2>
       <small >Hosted by {{getCreatorEvent(event).username}}</small><br>
-      <small class="text-muted">{{event.date_debut}} to {{event.date_fin}}
+      <small class="text-muted" *ngIf="event.date_debut!=undefined && event.date_fin!=undefined">{{event.date_debut}} to {{event.date_fin}}
 
       <p>
         <i class="fa fa-map-marker"></i>
@@ -28,11 +28,11 @@
       <p class="lead" *ngFor="let guested of event.userEventStatus" >
         <span *ngIf="guested.statut===1">{{guested.user.username}} </span>
       </p>
-      <p class="lead" *ngFor="let dates of event.event_dates" >
+      <!-- <p class="lead" *ngFor="let dates of event.event_dates" >
         <span >Date: From {{dates.start | date: 'medium'}} </span>
         <span >To {{dates.end | date: 'medium'}} </span>
-      </p>
-      <app-event-vote *ngIf="event.date_debut==undefined && event.date_fin==undefined"></app-event-vote>
+      </p> -->
+      <app-event-vote [host]="getCreatorEvent(event).username" *ngIf="event.date_debut==undefined && event.date_fin==undefined"></app-event-vote>
       <!--<pre>{{event | json}}</pre>-->
     </div>
   </div>
