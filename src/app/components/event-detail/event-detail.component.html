@@ -1,11 +1,11 @@
 <div class="jumbotron" style="background-position: center; background-size: 100%;" [ngStyle]="{'background-image': 'url('+ mapImage +')'}">
 </div>
 <div class="container">
-  <div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 600px;">
+  <div class="card" style="margin-top: -60px; margin-left: auto; margin-right: auto; max-width: 850px;">
       <button class="event-directions-fab" ngbTooltip="Google Maps" placement="top" (click)="viewDirections(mapLink)">
         <i class="fa fa-map fa-2x" aria-hidden="true"></i><span class="sr-only">View location on Google Maps</span>
       </button>
-    <div class="card-block" *ngIf="event">
+    <div class="container-md card-block" *ngIf="event">
       <h2 class="card-title">{{event.title}} <span class="event-type-tag"> {{event.typeEvent.name}} </span></h2>
       <small >Hosted by {{getCreatorEvent(event).username}}</small><br>
       <small class="text-muted" *ngIf="event.date_debut!=undefined && event.date_fin!=undefined">{{event.date_debut}} to {{event.date_fin}}
@@ -14,7 +14,7 @@
         <i class="fa fa-map-marker"></i>
         <a *ngIf="mapLink !== ''" [href]="mapLink" target="_blank" class="">{{event.adresse}}</a>
         <span *ngIf="mapLink === ''" class="">{{event.adresse}}</span>
-      </p> 
+      </p>
       </small>
       <div *ngIf="event.description !== ''">
         <h5>Info</h5>
