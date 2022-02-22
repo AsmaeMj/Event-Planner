@@ -30,7 +30,7 @@
   </div>
 </div>
 <div class="container">
-  <button
+  <!-- <button
     *ngIf="authenticationService.isUserLoggedIn()"
     class="create-event-fab"
     (click)="goTo('/create-event')"
@@ -38,7 +38,7 @@
     placement="top"
   >
     <i class="fa fa-plus"></i><span class="sr-only">Create an event</span>
-  </button>
+  </button> -->
   <p *ngIf="authenticationService.isUserLoggedIn()">&nbsp;</p>
   <div class="row justify-content-md-center">
     <div class="col-5 ">
@@ -67,14 +67,16 @@
       </ul>
     </div>
     <div class="col-3">
-      <div class="form-group">
+      <div class="form-control text-muted text-sm" style="margin-top: 26px;">
         <label for="filter"></label>
-        <input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)">
-        <br>
+         <!--<input type="text" name="filter" id="filter" class="form-control" placeholder="Search" aria-describedby="helpId" (keyup)="onKey($event)">
+        <br> -->
+        <i class="fas fa-magnifying-glass "></i>
+         <input name="filter" id="filter" type="text" [(ngModel)]="eventsearch" class="searcheventsearch" placeholder="What are you looking for" ngbTooltip="search by title type host or guest">
       </div>
     </div>
   </div>
-  <div class="row justify-content-md-center" *ngFor="let event of events">
+  <div class="row justify-content-md-center" *ngFor="let event of events | filter:eventsearch">
       <div class=" col-8 list-group" style="margin-bottom: 10px; margin: 0px 0px 0px 0px">
         <div class=" list-group-item card-event " style="margin-bottom: 5px;">
           <div class="row">

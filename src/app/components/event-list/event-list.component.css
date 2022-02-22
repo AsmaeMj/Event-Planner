@@ -37,6 +37,7 @@
 .icon-event > a{
     margin-bottom: 3px !important;
     width: 30px !important;
+    padding-left: 7px;
     align-self: center;
 }
 .icon-event>i{

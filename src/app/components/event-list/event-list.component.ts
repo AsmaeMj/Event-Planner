@@ -41,6 +41,8 @@ export class EventListComponent implements OnInit {
   createdok: any;
   newNotification: boolean=false;
   isNotAcceptedvar: boolean;
+  searcheventsearch: string;
+  eventsearch: string;
   constructor(private notificationService: NotificationService ,private router: Router, private userService: UserService, private eventService: EventService, public authenticationService: JwtAuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -192,29 +194,29 @@ export class EventListComponent implements OnInit {
     return moment(date).format('MMMM Do YYYY [at] hh:mm a');
   }
 
-  onKey(event: any) { // without type info
-    var query = event.target.value;
-    console.log(query);
-    this.events=(query) ? this.querySearch(query) : this.eventService.getEvents();
-  }
+  // onKey(event: any) { // without type info
+  //   var query = event.target.value;
+  //   console.log(query);
+  //   this.events=(query) ? this.querySearch(query) : this.eventService.getEvents();
+  // }
 
-  createFilterFor(query) {
-      var lowercaseQuery = String(query).toLowerCase().split(' ');
-      return function filterFn(item) {
-        var label = String(item.name +';'+ item.eventType).toLowerCase().split(' ').join('');
-        for(var element of lowercaseQuery)
-        {
-          if(!label.includes(element))
-            return false;
-          console.log(element);
-        }
-        return true;
-      };
-    }
+  // createFilterFor(query) {
+  //     var lowercaseQuery = String(query).toLowerCase().split(' ');
+  //     return function filterFn(item) {
+  //       var label = String(item.name +';'+ item.eventType).toLowerCase().split(' ').join('');
+  //       for(var element of lowercaseQuery)
+  //       {
+  //         if(!label.includes(element))
+  //           return false;
+  //         console.log(element);
+  //       }
+  //       return true;
+  //     };
+  //   }
 
-  querySearch (query) {
-    return  query ? this.eventService.getEvents().filter(this.createFilterFor(query) ) : [];
-  }
+  // querySearch (query) {
+  //   return  query ? this.eventService.getEvents().filter(this.createFilterFor(query) ) : [];
+  // }
 
   deleteEvent(id){
     this.eventService.deleteEvent(id).subscribe(
