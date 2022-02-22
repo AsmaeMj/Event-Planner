@@ -200,9 +200,14 @@ export class EventService {
     return this.httpClient.put<Event>( url, datevote);
   }
 
-  getdatevoted(event_id,username){    
-    let url = `http://localhost:8080/events/${event_id}/${username}/datevoted`;    
+  getdatevoted(event_id,username){
+    let url = `http://localhost:8080/events/${event_id}/${username}/datevoted`;
     return this.httpClient.get<any>(url);
+
+  }
+  updateevent(event){
+    let url = `http://localhost:8080/event/update`;
+    return this.httpClient.put<any>(url,event);
 
   }
 }
